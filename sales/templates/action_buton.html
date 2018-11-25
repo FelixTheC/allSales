@@ -1,0 +1,22 @@
+<a href="{{ object.get_back_to_list }}" class="btn btn-secondary open-list-btn">Back to list</a>
+<a href="{% url 'sales:listdoneorders' %}" class="btn btn-secondary done-list-btn" style="display: none">Back to list</a>
+<a href="{{ object.get_sells_update_url }}" class="btn btn-success edit-btn">Edit</a>
+<a href="{{ object.get_pdf }}" class="btn btn-info">
+{% if object.order_acceptet %}
+    Order Pdf
+{% else %}
+    Draft Pdf
+{% endif %}
+</a>
+<a href="{{ object.get_prod_rec_pdf }}" class="btn btn-info">Pre Production Record</a>
+<div style="float:right">
+
+{% if not inPrioListe %}
+    {% if object.check_for_prod_rec %}
+        <a href="{{ object.get_accept_url }}"
+       target="_blank"
+       onClick="window.open('{{ object.write_into_priolist }}','pagename', 'resizable,height=900,width=450,left=' + (parseInt(window.innerWidth) * 0.85) + ',top=100'); return false;"
+       class="btn btn-secondary accept-order-btn btn-danger">Accept Survey Order and write into PrioListe</a>
+    {% endif %}
+{% endif %}
+</div>

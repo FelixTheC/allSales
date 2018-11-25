@@ -1,0 +1,92 @@
+{% extends 'sales_base.html'%}
+{% load extra_tags %}
+{% block extra_style %}
+<style>
+    @media screen and (max-width: 940px) {
+        .diff-shipping {
+            display: none!important;
+        }
+    }
+</style>
+{% endblock %}
+{% block content %}
+    <div class="col-md-12 col-lg-12">
+        <h1 style="margin-left: 35%">{{ title }}</h1>
+        <div class="col-md-12 col-lg-12">
+            <div class="col-sm-12 col-md-4 col-lg-4">
+                <form action="{% url 'sales:search' title|replace_whitespace:'' %}" method="post" style="float:left; display: inline-grid;">
+                    {% csrf_token %}
+                    {{ form_search.as_p }}
+                <input type="submit" value="Search/Clear" class="btn btn-dark btn-sm">
+            </form>
+            </div>
+            <div class="col-sm-12 col-md-offset-4 col-lg-offset-4 col-md-3 col-lg-3" style="float:right">
+                <a href="{% url 'sales:overview'  %}" class="btn btn-secondary btn-sm">Back to overview</a>
+                {% if 'Accepted' in title %}
+                    <a href="{% url 'sales:listsorders'  %}" class="btn btn-info btn-sm">To running orders</a>
+                {% else %}
+                    <a href="{% url 'sales:listdoneorders'  %}" class="btn btn-info btn-sm">To accepted orders</a>
+                {% endif %}
+                    <a href="{% url 'pListe:home'  %}" class="btn btn-primary btn-sm">To Priority-List</a>
+            </div>
+        </div>
+        <row>
+            <table class="table tablesorter">
+                <thead>
+                    <tr>
+                        <th>Operation Number</th>
+                        <th>Customer Staff</th>
+                        <th>Internal Staff</th>
+                        <th>Created at</th>
+                        <th>Contact Name</th>
+                        <th>Customer No.</th>
+                        <th>Collartype</th>
+                        <th>Customer Input</th>
+                        <th>Order Pdf</th>
+                        <th>Pre Production Record</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for element in list_objects %}
+                        {% for object in element %}
+                            {% if object.customer_invoice_address %}
+                                <tr style="background-color:#ffcc66">
+                            {% else %}
+                                <tr style="background-color:#ff6666;">
+                            {% endif %}
+                            {% if object.order_acceptet %}
+                                <tr style="background-color:#beeabe;">
+                            {% endif %}
+                                {% if object.operation_Number %}
+                                    <td> {{ object.operation_Number }}</td>
+                                {% else %}
+                                    <td> {{ object.operation_number }}</td>
+                                {% endif %}
+                                <td> {{ object.customer_staff }}</td>
+                                <td> {{ object.get_co_worker }}</td>
+                                <td> {{ object.created_at|date:"SHORT_DATE_FORMAT" }} </td>
+                                <td> {{ object.customer_invoice_address.contact_person }}</td>
+                                <td> {{ object.contacts_faktura_id }}</td>
+                                <td> {{ object.get_model_type }} </td>
+                                <td> <a href="{{ object.get_origin_pdf }}">original.pdf</a> </td>
+                                <td> <a href="{{ object.get_pdf }}">order.pdf</a> </td>
+                                <td> <a href="{{ object.get_prod_rec_pdf }}">Pre_Prod_Record.pdf</a></td>
+                                <td> <a href="{{ object.get_sells_detail_url }}">Edit</a></td>
+                                <td> <a href="{{ object.get_delete_url }}" class="btn-warning">[ X ]</a></td>
+                            </tr>
+                        {% endfor %}
+                    {% endfor %}
+                </tbody>
+        </table>
+        </row>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(function() {
+            $('.table').tablesorter( {sortList: [[0,0], [1,0]]} );
+        });
+    </script>
+{% endblock %}

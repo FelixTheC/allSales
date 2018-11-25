@@ -1,0 +1,22 @@
+{% extends 'sales_base.html' %}
+{% block content %}
+<div class="col-md-12 col-lg-12">
+    <h1 style="margin-left: 35%">Overview</h1>
+    <div class="col-md-offset-3 col-md-3 col-lg-offset-4 col-lg-3">
+        <table class="table">
+            <tr>
+                <td><h3><a href="{% url 'sales:createLink' %}" style="color:green!important">Generate Link</a></h3></td>
+            </tr>
+            <tr>
+                <td><h3><a href="{% url 'sales:listsorders' %}" style="color:#ffc107!important">Overview running Orders</a></h3></td>
+            </tr>
+            <tr>
+                <td><h3><a href="{% url 'sales:listdoneorders' %}" style="color:chocolate!important">Overview acceptet Orders</a></h3></td>
+            </tr>
+            <tr>
+                <td><h3><a href="{% url 'main' %}">Back to Main-Page</a></h3></td>
+            </tr>
+        </table>
+    </div>
+</div>
+{% endblock %}

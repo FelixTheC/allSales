@@ -1,0 +1,200 @@
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container-fluid" style="margin-top: 4%; padding-left: 3%; padding-right: 3%;">
+        <form action="#" method="post" style="font-size:25px;">
+        <div class="col-xs-12 col-md-offset-4 col-md-6 col-md-pull-2 col-lg-offset-4 col-lg-6 col-lg-pull-2" style="margin-top: -10px;">
+            <h3><i>Kiste</i>: {{ obj.box }} &emsp; <i>Kunde:</i> {{ obj.customer }} <br> <i>Hardware:</i> {{ obj.hardware }}</h3>
+            <br>
+        </div>
+            <div class="col-xs-12 col-md-3 col-lg-3">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="text" name="shelf_type" id="id_shelf_type" style="display: none;">
+                    <input type="text" name="num_of_rows" id="id_num_of_rows" value="" style="display: none;">
+            </div>
+            <div class="col-xs-12 col-md-6 col-lg-6" style="margin-top: -10px;">
+                <table class="shelfs table table-bordered">
+                    <tbody>
+                        <tr id="belt_shelf">
+                            <td style="width: 25%">
+                                {% for s in shelf %}
+                                    {% if s.shelf_type == 'belt' %}
+                                        {{ s.compartment }}
+                                    {% endif %}
+                                {% endfor %}
+                                <btn class="btn btn-info" onclick="add_belt_shelf()">+ Fach</btn>
+                                <a href="{{ obj.update_belt_shelf }}" class="btn btn-danger">Edit</a>
+                            </td>
+                        </tr>
+                        <tr id="batterie_shelf">
+                            <td class="batterie_shelf" style="width: 25%">
+                                {% for s in shelf %}
+                                    {% if s.shelf_type == 'batterie' %}
+                                            {{ s.compartment }}
+                                    {% endif %}
+                                {% endfor %}
+                                <btn class="btn btn-info" onclick="add_batterie_shelf()">+ Fach</btn>
+                                <a href="{{ obj.update_batterie_shelf }}" class="btn btn-danger">Edit</a>
+                            </td>
+                        </tr>
+                        <tr id="electric_shelf">
+                            <td class="electric_shelf" style="width: 25%">
+                                {% for s in shelf %}
+                                    {% if s.shelf_type == 'electric' %}
+                                            {{ s.compartment }}
+                                    {% endif %}
+                                {% endfor %}
+                                <btn class="btn btn-info" onclick="add_electric_shelf()">+ Fach</btn>
+                                <a href="{{ obj.update_electric_shelf }}" class="btn btn-danger">Edit</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        <input class="btn btn-primary btn-lg btn-block" type="submit" value="Enter">
+            <br>
+        <a class="btn btn-secondary btn-lg btn-block" href="{% url 'pListe:home' %}" onclick="window.close(); window.parent.location.href = '/';">Zurück</a>
+        </form>
+    </div>
+{% endblock %}
+{% block script %}
+<script>
+    function add_belt_shelf() {
+        $('#batterie_shelf').hide();
+        $('#electric_shelf').hide();
+        $('#id_shelf_type').val('belt');
+        var counter = $('.belts').length;
+        counter = (parseFloat(counter) / 3) + 1;
+        var char = 'belt_shelf_char_' + counter;
+        var id_char = 'belt_id_shelf_char_' + counter;
+        var num = 'belt_shelf_num_' + counter;
+        var id_num = 'belt_id_shelf_num_' + counter;
+        $('.shelfs > tbody > tr').append("<td class='belts'>"+
+        '<select name="' + char + '" id="' + id_char + '" >'+
+            '<option>A</option>'+
+            '<option>B</option>'+
+            '<option>C</option>'+
+            '<option>D</option>'+
+            '<option>E</option>'+
+            '<option>F</option>'+
+            '<option>G</option>'+
+            '<option>H</option>'+
+            '<option>K</option>'+
+            '<option>M</option>'+
+            '<option>N</option>'+
+            '<option>O</option>'+
+            '<option>P</option>'+
+            '<option>Q</option>'+
+            '<option>R</option>'+
+            '<option>S</option>'+
+            '<option>T</option>'+
+            '<option>V</option>'+
+            '<option>W</option>'+
+            '<option>X</option>'+
+            '<option>Y</option>'+
+            '<option>Z</option>'+
+        '</select>'+
+        '</td><td>'+
+        '<select name="' + num + '" id="' + id_num + '" >'+
+            '<option value="1">1</option>'+
+            '<option value="2">2</option>'+
+            '<option value="3">3</option>'+
+            '<option value="4">4</option>'+
+        '</select>'+
+        '</td><td>' + counter.toString() + '</td>')
+        $('#id_num_of_rows').val(counter);
+    }
+
+    function add_batterie_shelf() {
+        $('#belt_shelf').css('visibility', 'hidden');
+        $('#electric_shelf').hide();
+        $('#id_shelf_type').val('batterie');
+        var counter = $('.batteries').length;
+        counter = (parseFloat(counter) / 3) + 1;
+        var char = 'batterie_shelf_char_' + counter;
+        var id_char = 'batterie_id_shelf_char_' + counter;
+        var num = 'batterie_shelf_num_' + counter;
+        var id_num = 'batterie_id_shelf_num_' + counter;
+        $('.shelfs > tbody > tr').append("<td class='batteries'>"+
+        '<select name="' + char + '" id="' + id_char + '" >'+
+            '<option>A</option>'+
+            '<option>B</option>'+
+            '<option>C</option>'+
+            '<option>D</option>'+
+            '<option>E</option>'+
+            '<option>F</option>'+
+            '<option>G</option>'+
+            '<option>H</option>'+
+            '<option>K</option>'+
+            '<option>M</option>'+
+            '<option>N</option>'+
+            '<option>O</option>'+
+            '<option>P</option>'+
+            '<option>Q</option>'+
+            '<option>R</option>'+
+            '<option>S</option>'+
+            '<option>T</option>'+
+            '<option>V</option>'+
+            '<option>W</option>'+
+            '<option>X</option>'+
+            '<option>Y</option>'+
+            '<option>Z</option>'+
+        '</select>'+
+        '</td><td>'+
+        '<select name="' + num + '" id="' + id_num + '" >'+
+            '<option>1</option>'+
+            '<option>2</option>'+
+            '<option>3</option>'+
+            '<option>4</option>'+
+        '</select>'+
+        '</td><td>' + counter.toString() + '</td>')
+        $('#id_num_of_rows').val(counter);
+    }
+
+    function add_electric_shelf() {
+        $('#belt_shelf').css('visibility', 'hidden');
+        $('#batterie_shelf').css('visibility', 'hidden');
+        $('#id_shelf_type').val('electric');
+        var counter = $('.electrics').length;
+        counter = (parseFloat(counter) / 3) + 1;
+        var char = 'electric_shelf_char_' + counter;
+        var id_char = 'electric_id_shelf_char_' + counter;
+        var num = 'electric_shelf_num_' + counter;
+        var id_num = 'electric_id_shelf_num_' + counter;
+        $('.shelfs > tbody > tr').append("<td class='electrics'>"+
+        '<select name="' + char + '" id="' + id_char + '" >'+
+            '<option>A</option>'+
+            '<option>B</option>'+
+            '<option>C</option>'+
+            '<option>D</option>'+
+            '<option>E</option>'+
+            '<option>F</option>'+
+            '<option>G</option>'+
+            '<option>H</option>'+
+            '<option>K</option>'+
+            '<option>M</option>'+
+            '<option>N</option>'+
+            '<option>O</option>'+
+            '<option>P</option>'+
+            '<option>Q</option>'+
+            '<option>R</option>'+
+            '<option>S</option>'+
+            '<option>T</option>'+
+            '<option>V</option>'+
+            '<option>W</option>'+
+            '<option>X</option>'+
+            '<option>Y</option>'+
+            '<option>Z</option>'+
+        '</select>'+
+        '</td><td>'+
+        '<select name="' + num + '" id="' + id_num + '" >'+
+            '<option>1</option>'+
+            '<option>2</option>'+
+            '<option>3</option>'+
+            '<option>4</option>'+
+        '</select>'+
+        '</td><td>' + counter.toString() + '</td>')
+        $('#id_num_of_rows').val(counter);
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,193 @@
+{% include 'basePdf.html' %}
+{% load extra_tags %}
+{% block extra_style %}
+<style>
+    @page {
+        size: A4 landscape;
+        margin: 1cm;
+    }
+    .normal {
+        font-size: 14px;
+    }
+    .normal-red {
+        font-size: 14px;
+        color: chocolate;
+    }
+    .normal-red-p {
+        font-size: 14px;
+        color: chocolate;
+        display: inline;
+    }
+    span {
+        font-size: 14px;
+    }
+    .table {
+        padding: 2px;
+        text-align: center;
+    }
+    .t_table {
+        padding: 2px;
+        font-size: 12px !important;
+    }
+    .d_table {
+        padding: 2px 10px 0 10px;
+        font-size: 12px !important;
+    }
+    .c_table {
+        padding: 2px;
+        font-size: 12px !important;
+    }
+    .normal-head-table {
+        padding: 0 0 0 6em;
+        font-size: 14px;
+    }
+    .red-programming-table {
+        padding: -0.25em 0 0 -8em;
+        font-size: 14px;
+        color: chocolate;
+    }
+    .black-programming-table {
+        padding: -0.25em 0 0 -8em;
+        font-size: 14px;
+        color: black;
+    }
+    .row-bottom-space {
+        padding: 0 0 0.5em 0;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div>
+<!-- Begin Kopfbereich -->
+    <p style="margin: 0 0 0 75em;">
+        <img src="/static/newlogo.png" alt="logo" height="100px">
+    </p>
+</div>
+<div>
+    <p style="font-size:22px;color:#37b74e;margin:0 0 0 15em;">
+        <b>{{ object.get_model_type|upper }} Collar {{ test|safe }}Production Record</b>
+    </p>
+
+    <table style="cellspacing: 10em;">
+        <tr>
+            {% if object.globalstar %}
+                <td class="normal">Type of Collar: <span><b>{{ object.get_model_type }} GL</b></span></td>
+            {% elif object.iridium %}
+                <td class="normal">Type of Collar: <span><b>{{ object.get_model_type }} IR</b></span></td>
+            {% elif object.gsm %}
+                <td class="normal">Type of Collar: <span><b>{{ object.get_model_type }} GSM</b></span></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td class="normal">No. of Collars: <span><b>{{ sum_collar }}</b></span></td>
+            <td class="normal-head-table">Customer Name: <span><b>{{ object.customer_invoice_address.contact_person }}</b></span></td>
+        </tr>
+        <tr>
+            <td class="normal">Progress No.: <span><b>{{ progress_number }}</b></span></td>
+            <td class="normal-head-table">Species: <span><b>{{ prod_rec_first.animal_species }}</b></span></td>
+        </tr>
+        <tr>
+            {% if co_worker %}
+                <td class="normal">Staff: <span><b>{{ object.customer_staff }}/{{ co_worker }}</b></span></td>
+            {% else %}
+                <td class="normal">Staff: <span><b>{{ object.customer_staff }}</b></span></td>
+            {% endif %}
+            <td class="normal-head-table">Finished until: <span><b>{{ finished_until|date:"d.m.y" }}</b></span></td>
+        </tr>
+        <tr>
+            <td class="normal">Date: <span><b>{{ date|date:"d.m.y" }}</b></span></td>
+            <td class="normal-head-table">Vnr.: <span><b>{{ object.operation_Number }}</b></span></td>
+        </tr>
+    </table>
+<!-- End Kopfbereich -->
+    <br>
+<!-- Begin Tabelle -->
+    <table style="border: 1px solid black;">
+        <tbody style="font-size: 14px;">
+            <tr>
+                <th class="d_table"></th>
+                <th class="table">Number of TrapTransmitter</th>
+            </tr>
+            {% for p in prod_rec %}
+                <tr>
+                    <td class="c_table">{{ forloop.counter }}.)</td>
+                    <td class="table">{{ amount|get_index:forloop.counter0 }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+<!-- End Tabelle -->
+<!-- Begin Belt Comments -->
+    <p class="normal"><b style="color:chocolate;">Comments:
+        {% for p in prod_rec %}
+            {% if p.further_instructions_belt %}
+                {{ p.further_instructions_belt }}
+            {% endif %}
+        {% endfor %}</b>
+        <span></span>
+    </p>
+<!-- End Belt Comments -->
+<!--############ End Page 1 ############-->
+<!--############ Begin Page 2 ############-->
+    <div>
+<!-- Begin Kopfbereich -->
+    <!--<p style="margin: 0 0 0 75em;">-->
+        <!--<img src="/static/newlogo.png" alt="logo" height="100px">-->
+    <!--</p>-->
+</div>
+<!-- Begin Programming -->
+    <br><br>
+    <span class="normal">VHF Beacon Frequency (151.000) MHz:</span>
+        <br>
+        {% with list_frequencies=object.vhf_beacon_frequency|split_by_arg:' ' %}
+            {% for frequence in list_frequencies %}
+                    <span class="normal-red-p">{{ frequence }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    {% if forloop.counter|divisibleby:"12" %}
+                        <br>
+                    {% endif %}
+            {% endfor %}
+        {% endwith %}
+    <br><br>
+    <table>
+        <tr class="row-bottom-space">
+            <td class="normal">Type of Comunication:</td>
+            {% if object.globalstar %}
+                <td class="black-programming-table"><b>GLOBALSTAR</b></td>
+            {% elif object.iridium %}
+                <td class="black-programming-table"><b>IRIDIUM</b></td>
+            {% endif %}
+        </tr>
+        <tr class="row-bottom-space">
+            <td class="normal">VHF Power (10 dBm):</td>
+            <td class="red-programming-table"></td>
+        </tr>
+<!-- End Programming -->
+<!-- Begin GPS -->
+        <tr>
+            <td class="normal">Interval status message:</td>
+            <td class="red-programming-table">{{ object.interval }}</td>
+        </tr>
+        <tr class="row-bottom-space">
+            <td class="normal">Notification eMail:</td>
+            <td class="red-programming-table">{{ object.notification_mail }}</td>
+        </tr>
+        <tr class="row-bottom-space">
+            <td class="normal-red">Notification SMS:</td>
+            <td class="red-programming-table">{{ object.notification_sms }}</td>
+        </tr>
+        <tr class="row-bottom-space">
+            <td class="normal">GL channel:</td>
+            {% if 'America' in object.world_location %}
+                <td class="red-programming-table">A</td>
+            {% else %}
+                <td class="red-programming-table">C</td>
+            {% endif %}
+        </tr>
+    </table>
+    <p class="normal-red"><b>Comments: </b><span class="normal-red">{{ prod_rec_first.further_instructions_programming }}</span></p>
+<!-- End GPS -->
+    <p class="normal"><b>Path: </b><span>{{ prod_rec_first.path_customer_folder }}</span></p>
+    {{ test|safe }}
+<!--############ End Page 2 ############-->
+</div>
+{% endblock %}

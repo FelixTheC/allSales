@@ -1,0 +1,28 @@
+<div class="col-md-4 col-lg-4">
+    {% if add_exists %}
+        <h3>Invoice Address</h3>
+    {% else %}
+        <h3>Invoice Address <i>which is not in Faktura</i></h3>
+    {% endif %}
+    <li>Organisation name: <b> {{ object.customer_invoice_address.organisation_name }} </b></li>
+        <li>Complete address: <b> {{ object.customer_invoice_address.complete_addresse }} </b></li>
+        <li>Zip code: <b> {{ object.customer_invoice_address.zip_code }} </b></li>
+        <li>City: <b> {{ object.customer_invoice_address.city }} </b></li>
+        <li>Country: <b> {{ object.customer_invoice_address.country }} </b></li>
+        <li>Contact person: <b> {{ object.customer_invoice_address.contact_person }} </b></li>
+        <li>E-mail addresse: <b> {{ object.customer_invoice_address.email_addresse }} </b></li>
+        <li>Telephone: <b> {{ object.customer_invoice_address.telephone_nr }} </b></li>
+</div>
+{% if object.same_addr == False %}
+    <div class="col-md-4 col-lg-4">
+        <h3>Detailed delivery address</h3>
+        <li>Organisation name: <b> {{ object.delivery_addresse.delivery_organisation_name }} </b></li>
+        <li>Complete address: <b> {{ object.delivery_addresse.delivery_complete_addresse }} </b></li>
+        <li>Zip code: <b> {{ object.delivery_addresse.delivery_zip_code }} </b></li>
+        <li>City: <b> {{ object.delivery_addresse.delivery_city }} </b></li>
+        <li>Country: <b> {{ object.delivery_addresse.delivery_country }} </b></li>
+        <li>Contact person: <b> {{ object.delivery_addresse.delivery_contact_person }} </b></li>
+        <li>E-mail addresse: <b> {{ object.delivery_addresse.delivery_email_addresse }} </b></li>
+        <li>Telephone: <b> {{ object.delivery_addresse.delivery_telephone_nr }} </b></li>
+    </div>
+{% endif %}

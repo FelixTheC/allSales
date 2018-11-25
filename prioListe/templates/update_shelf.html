@@ -1,0 +1,16 @@
+{% include 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="col-sm-12 col-md-6 col-lg-6" style="margin-top: 10em;">
+        <h2>Update <b>{{ shelf_type|title }}fach</b></h2>
+        <form action="." method="post" class="form-group">
+            {% csrf_token %}
+            <h3><i>Kiste</i>: {{ obj.box }} &emsp; <i>Kunde:</i> {{ obj.customer }} <br> <i>Hardware:</i> {{ obj.hardware|wordwrap:50|linebreaksbr }}</h3>
+            <input type="text" value="{{ object.compartment }}" name="shelf" id="id_shelf"
+                   style="margin-bottom: 0.5em; font-size: 21px!important;">
+            <input type="submit" class="btn btn-primary btn-block">
+            <a href="{{ obj.get_update_production }}" class="btn btn-danger btn-block">Abbrechen</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

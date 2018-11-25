@@ -1,0 +1,54 @@
+{% extends 'surveyHtml4Pdf.html' %}
+{% load extra_tags %}
+
+{% block title %}
+    <b>Final Collar Specification for a Mini Fawn Collar order</b>
+{% endblock %}
+
+{% block collar_composition %}
+    <table class="table" style="border: 1px solid black;">
+        <tr>
+            <td class="main-td" >Animal species: <b> {{ object.animal_species }} </b></td>
+            <td class="main-td">Belt shape: <b>
+                {% if object.belt_shape %}
+                    {{ object.belt_shape }}
+                {% else %}
+                    not specified
+                {% endif %}
+                </b>
+            </td>
+        </tr>
+    </table>
+    <table class="table" style="border: 1px solid black;">
+        <tr>
+            <td class="main-td"><b>{{ object.battery_size }} </b> - Battery size</td>
+            <td class="main-td">min belt circumference: <b>
+                {% if object.min_belt_circumference %}
+                    {{ object.min_belt_circumference }}
+                {% else %}
+                    not specified
+                {% endif %}
+            </b></td>
+        </tr>
+        <tr>
+            <td class="main-td"><b>{{ object.number_of_collars|find_and_replace:' | ' }}</b> - No of collars</td>
+            <td class="main-td">max belt circumference: <b>
+                {% if object.max_belt_circumference %}
+                    {{ object.max_belt_circumference }}
+                {% else %}
+                    not specified
+                {% endif %}
+            </b></td>
+        </tr>
+    </table>
+{% endblock %}
+
+{% block dropoff %}
+    <tr>
+        {% if object.cotton_layers %}
+            <td class="main-td">Cotton spacer: <b>{{ object.cotton_layers }}</b></td>
+        {% else %}
+            <td class="main-td">Cotton spacer: <b>not specified</b></td>
+        {% endif %}
+    </tr>
+{% endblock %}

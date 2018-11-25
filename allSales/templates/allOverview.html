@@ -1,0 +1,36 @@
+{% extends 'all_base.html' %}
+{% load extra_tags %}
+{% block content %}
+<div class="col-md-12 col-lg-12">
+    <h1 style="margin-left: 35%">Welcome Salesteam</h1>
+    <div class="col-md-offset-3 col-md-3 col-lg-offset-4 col-lg-3">
+        <table class="table">
+            {% for route in routes %}
+                {% if route.get_second_root %}
+                <tr>
+                    <td>
+                        <h3>
+                            <a href="{{ route.get_second_root }}">{{ route.get_second_labelname }}</a>
+                        </h3>
+                    </td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <td><h3>
+                            <a href="{{ route.get_main_root }}">{{ route.get_labelname }}</a>
+                    </h3></td>
+                </tr>
+            {% endfor %}
+            <tr>
+                <td>-----------------------------------------------------------------------------</td>
+            </tr>
+            <tr>
+                <td><h3><a href="http://192.168.0.34:9004/" target="_blank">Ticketsystem</a></h3></td>
+            </tr>
+            <!--<tr>-->
+                <!--<td><h3><a href="{% url 'statistic:statistic_shippings' %}" target="_blank">Shippings-Statistic</a></h3></td>-->
+            <!--</tr>-->
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends 'sales_base.html'%}
+{% load extra_tags %}
+{% block content %}
+<div style="margin-left:30%">
+    <h1>Survey order information <b>{{ object.operation_Number }}</b></h1>
+</div>
+<div class="col-md-12 col-lg-12">
+    <div class="col-md-offset-1 col-md-3 col-lg-offset-1 col-lg-3">
+            <h3>Order Information</h3>
+            <ul>
+                <li><u><b>1. Payment details</b></u></li>
+                <li>Payment option: <b> {{ object.payment_option }} </b></li>
+                {% if object.order_no %}
+                    <li>Order no: <b> {{ object.order_no }} </b></li>
+                {% endif %}
+                <li>Ordering confirmation:
+                    {% if object.as_post %}
+                    <b>via Mail</b>
+                    {% elif object.as_email %}
+                    <b>via e-mail to {{ object.invoice_mail }}</b>
+                    {% endif %}
+                </li>
+                <li></li>
+                <li><u><b>2. Composition of the collar:</b></u></li>
+                <li>Animal species: <b> {{ object.animal_species }} </b></li>
+                {% if object.number_of_collars|length > 1 %}
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Num Collars</th>
+                            <th>Battery size</th>
+                            <th>Nom collar circumference</th>
+                        </tr>
+                        {% for i in collar_num_list %}
+                            {% with forloop.counter0 as counter %}
+                                <tr>
+                                    {% for i in collar_num_list %}
+                                        <td>{{ i|get_index:counter }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endwith %}
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Num Collars</th>
+                            <th>Battery size</th>
+                            <th>Nom collar circumference</th>
+                        </tr>
+                        <tr>
+                            <td>{{ object.number_of_collars}}</td>
+                            <td>{{ object.battery_size}}</td>
+                            <td>{{ object.nom_collar_circumference}}</td>
+                        </tr>
+                    </table>
+                {% endif %}
+                <li>Belt shape: <b> {{ object.belt_shape }} </b></li>
+                <li>Belt width: <b> {{ object.belt_width }} </b></li>
+                <li>Belt thickness: <b> {{ object.belt_thickness }} </b></li>
+                <li>Belt edge: <b> {{ object.belt_edge }} </b></li>
+                <li>Belt color: <b> {{ object.belt_colour }} </b></li>
+                {% if object.other_color %}
+                <li>Other colour: <b> {{ object.other_color }} </b></li>
+                {% endif %}
+                <li>Belt labeling: <b> {{ object.belt_labeling }} </b></li>
+                <li>Belting instructions: <b> {{ object.belting_instructions }} </b></li>
+                <li>Belt marking: <b> {{ object.belt_plates }} </b></li>
+                <li>Marking instructions: <b> {{ object.plates_instructions }} </b></li>
+                <li></li>
+                <li><u><b>3. Programming of the collar</b></u></li>
+                <li>Mortality sensor delay time: <b> {{ object.mortality_sensor }} </b></li>
+                <li>Notification e-mail: <b> {{ object.notification_mail }} </b></li>
+                <li>Notification SMS: <b> {{ object.notification_sms }} </b></li>
+                <li>Timezone: <b>{{ object.utc_lmt }}</b></li>
+                <li>UTC correction: <b> {{ object.utc_correction }} </b></li>
+                <li>GPS schedule: <b>{{ object.gps_schedule }}</b></li>
+                <li>VHF beacon schedule: <b>{{ object.vhf_beacon_schedule }}</b></li>
+                <li>VHF beacon frequencies: <b> {{ object.vhf_beacon_frequency }} </b></li>
+                <li>ID-Tag: {{ object.id_tag }}</li>
+                <li></li>
+                <li><u><b>4. Collar Communication</b></u></li>
+                <li>GLOBALSTAR: <b>{{ object.globalstar }}</b></li>
+                <li>IRIDIUM: <b>{{ object.iridium }}</b></li>
+                <li>nom of IRIDIUM communication: <b>{{ object.iridium_num_of_fixes_iridium }}</b></li>
+                <li>IRIDIUM amount of GPS positions: <b>{{ object.iridium_num_of_fixes_gps }}</b></li>
+                <li>Airtime fee contact name: <b>{{ object.contact_name_airtime_fee }}</b></li>
+                <li>Airtime fee contact e-mail: <b>contact_mail_airtime_fee</b></li>
+                <li>Airtime fee contract: <b><a href="https://wombat.vectronic-wildlife.com:9003/download/{{ object.airtime_contract }}">{{ object.airtime_contract }}</a></b></li>
+                <li></li>
+                {% if object.external_dropoff %}
+                    <li><b>5. Drop off options</b></li>
+                    <li>External drop off: {{ object.external_dropoff }}</li>
+                    <li>E. drop off RELATIVE mode: <b>{{ object.external_dropoff_real_time }}</b></li>
+                    <li>E. drop off ABSOLUTE mode: <b>{{ object.external_dropoff_abs_time }}</b></li>
+                {% endif %}
+                {% if object.comment %}
+                    <li></li>
+                    <li><u><b>6. Further Instructions</b></u></li>
+                    <li>Further Instructions: {{ object.comment }}</li>
+                    <li></li>
+                {% endif %}
+                <li>Created at: <b> {{ object.created_at }} </b></li>
+                <li>Order acceptet: <b> {{ object.order_acceptet }} </b></li>
+                <br>
+            </ul>
+    </div>
+        {% include 'detail_address.html' %}
+    </div>
+</div>
+    <div style="margin-left:10%; margin-bottom: 3%;">
+       {% include 'action_buton.html' %}
+    </div>
+{% endblock %}

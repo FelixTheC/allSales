@@ -1,0 +1,89 @@
+{% extends 'sales_base.html'%}
+{% block content %}
+<div style="margin-left:30%">
+    <h1>Survey order information <b>{{ object.operation_Number }}</b></h1>
+</div>
+<div class="col-md-12 col-lg-12">
+    <div class="col-md-offset-1 col-md-3 col-lg-offset-1 col-lg-3">
+            <h3>Order Information</h3>
+            <ul>
+                <li>Payment option: <b> {{ object.payment_option }} </b></li>
+                {% if object.order_no %}
+                    <li>Order no: <b> {{ object.order_no }} </b></li>
+                {% endif %}
+                <li>Number of collars: <b> {{ object.number_of_collars }} </b></li>
+                <li>Animal species: <b> {{ object.animal_species }} </b></li>
+                <li>Battery size: <b> {{ object.battery_size }} </b></li>
+                <li>Belt shape: <b> {{ object.belt_shape }} </b></li>
+                <li>Nom. collar circumference: <b> {{ object.nom_collar_circumference }} </b></li>
+                <li>VHF beacon frequency: <b> {{ object.vhf_beacon_frequency }} </b></li>
+                <li>Mortality sensor: <b> {{ object.mortality_sensor }} </b></li>
+                {% if object.external_dropoff == True %}
+                    <li>External drop off: <b> {{ object.external_dropoff }} </b></li>
+                    <li>External drop off controll: <b>{{ object.external_dropoff_controll }}</b></li>
+                    <li>External drop off real time: <b> {{ object.external_dropoff_real_time }} </b></li>
+                    <li>External drop off abs time: <b> {{ object.external_dropoff_abs_time }} </b></li>
+                {% endif %}
+                <li>UTC/LMT: <b> {{ object.utc_lmt }} </b></li>
+                {% if object.utc_lmt == 'lmt' %}
+                    <li>UTC correction: <b> {{ object.utc_correction }} </b></li>
+                {% endif %}
+                <li>VHF beacon schedule: <b> {{ object.vhf_beacon_schedule }} </b></li>
+                <li>GPS schedule: <b> {{ object.gps_schedule }} </b></li>
+                {% if object.further_programming_settings %}
+                    <li>Further programming settings: <b>{{ object.further_programming_settings }}</b></li>
+                {% endif %}
+                <li></li>
+                <li>Globalstar: <b> {{ object.globalstar }} </b></li>
+                <li>Iridium: <b> {{ object.iridium }} </b></li>
+                <li>GSM: <b> {{ object.gsm }} </b></li>
+                {% if object.iridium == True %}
+                    <li>Iridium mode: <b>{{ object.iridium_mode }}</b></li>
+                    <li>Num of fixes: <b>{{ object.iridium_num_of_fixes }}</b></li>
+                {% endif %}
+                {% if object.gsm == True %}
+                    {% if object.gsm_vectronic_sim %}
+                        <li>VECTRONIC sim chips messages: <b>{{ object.iridium_mode }}</b></li>
+                    {% else %}
+                        <li>Telephone no: <b>{{ object.gsm_customer_sim_telephone_no }}</b></li>
+                        <li>PIN's: <b>{{ object.gsm_customer_sim_pin }}</b></li>
+                        <li>PUK's: <b>{{ object.iridium_num_of_fixes }}</b></li>
+                    {% endif %}
+                {% endif %}
+                <li>Contact name airtime fee: <b> {{ object.contact_name_airtime_fee }} </b></li>
+                <li>Contact mail airtime fee: <b> {{ object.contact_mail_airtime_fee }} </b></li>
+                <li>Notification mail: <b> {{ object.notification_mail }} </b></li>
+                <li>Notification sms: <b> {{ object.notification_sms }} </b></li>
+                <li></li>
+                <li>Belt width: <b> {{ object.belt_width }} </b></li>
+                <li>Belt thickness: <b> {{ object.belt_thickness }} </b></li>
+                <li>Belt edge: <b> {{ object.belt_edge }} </b></li>
+                <li>Belt color: <b> {{ object.belt_colour }} </b></li>
+                {% if object.other_color %}
+                <li>Other colour: <b> {{ object.other_color }} </b></li>
+                {% endif %}
+                <li>Belt labeling or plates: <b> {{ object.belt_labeling_plates }} </b></li>
+                <li>Belting instructions: <b> {{ object.belting_instructions }} </b></li>
+                <li>Cotton layers: {{ object.cotton_layers }}</li>
+                <li></li>
+                <li>Comments: <b>{{ object.comment }} </b></li>
+                <li></li>
+                <li>Ordering confirmation:
+                    {% if object.as_post %}
+                    <b>via Mail</b>
+                    {% elif object.as_email %}
+                    <b>via e-mail to {{ object.invoice_mail }}</b>
+                    {% endif %}
+                </li>
+                <li>Created at: <b> {{ object.created_at }} </b></li>
+                <li>Order acceptet: <b> {{ object.order_acceptet }} </b></li>
+                <br>
+            </ul>
+    </div>
+        {% include 'detail_address.html' %}
+    </div>
+</div>
+    <div style="margin-left:10%">
+       {% include 'action_buton.html' %}
+    </div>
+{% endblock %}

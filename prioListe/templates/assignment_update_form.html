@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<div style="text-align:center; margin-top:10%;" class="container">
+        <form action="#" method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+                {% if field.name == 'production_remark' or field.name == 'hardware' %}
+                        <div class="form-group textarea" align="right">
+                            <label class="form-check-label">{{ field.label }}</label>
+                            {{ field }}
+                        </div>
+                {% else %}
+                        <div class="form-group" align="left">
+                            <label class="form-check-label">{{ field.label }}</label>
+                            {{ field }}
+                        </div>
+                {% endif %}
+            {% endfor %}
+        <input class="btn btn-primary btn-lg btn-block" type="submit" value="Bestätigen" >
+        </form>
+        <br>
+        <a class="btn btn-secondary btn-lg btn-block" href="{% url 'pListe:home' %}">Zurück</a>
+</div>
+{% endblock %}
+{% block script %}
+    <script>
+        document.getElementById("id_optional_status").onchange = function() {myFunction()};
+
+        function myFunction() {
+            var x = document.getElementById("id_status");
+            x.value = '';
+        }
+    </script>
+{% endblock %}

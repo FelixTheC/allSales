@@ -1,0 +1,85 @@
+{% extends 'sales_base.html'%}
+{% block content %}
+    <div class="col-md-12 col-lg-12">
+        <h1 style="margin-left: 35%">List of Survey orders</h1>
+        <div class="col-md-12 col-lg-12">
+            <div class="col-md-4 col-lg-4">
+                <form action="{% url 'sales:survey_search' %}" method="post" style="float:left; display: inline-grid;">
+                    {% csrf_token %}
+                    {{ form_search.as_p }}
+                <input type="submit" value="Search/Clear" class="btn btn-dark btn-sm">
+            </form>
+            </div>
+            <div class="col-md-4 col-lg-4">
+                <form action="{% url 'sales:listsurveysstaff' %}" method="post">
+                    {% csrf_token %}
+                    {{ form_staffs.as_p }}
+                    <input type="submit" value="Show only" class="form-group btn btn-info btn-sm">
+                </form>
+            </div>
+            <div class="col-md-offset-1 col-lg-offset-1 col-md-3 col-lg-3">
+                <a href="{% url 'sales:overview'  %}" class="btn btn-secondary btn-sm">Back to overview</a>
+                <a href="{% url 'sales:listsurveys'  %}" class="btn btn-info btn-sm">Reset Filter</a>
+            </div>
+        </div>
+        <row>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Operation Number</th>
+                        <th>Date</th>
+                        <th>Customer No.</th>
+                        <th>Differing Shipping Address</th>
+                        <th>Num Collars</th>
+                        <th>Communication type</th>
+                        <th>Species</th>
+                        <th>Customer Staff</th>
+                        <th>Order accepted</th>
+                        <th>Ordering confirmation</th>
+                        <th>Detail</th>
+                        <th>pdf</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for object in object_list %}
+                        {% if object.customer_invoice_address %}
+                            <tr style="background-color:#ffcc66">
+                        {% else %}
+                            <tr style="background-color:#ff6666;">
+                        {% endif %}
+                        {% if object.order_acceptet %}
+                            <tr style="background-color:#c8fdc8;;">
+                        {% endif %}
+                        <td>{{ object.operation_Number }}</td>
+                        <td> {{ object.created_at|date:"SHORT_DATE_FORMAT" }} </td>
+                        <td>{{ object.contacts_faktura_id }}</td>
+                        {% if object.same_addr %}
+                            <td>No</td>
+                        {% else %}
+                            <td><b>Yes</b></td>
+                        {% endif %}
+                        <td> {{ object.number_of_collars }} </td>
+                        {% if object.globalstar %}
+                        <td> {{ object.globalstar }} </td>
+                        {% else %}
+                        <td> {{ object.iridium }} </td>
+                        {% endif %}
+                        <td> {{ object.animal_species }} </td>
+                        <td> {{ object.customer_staff }}</td>
+                        <td> {{ object.order_acceptet }} </td>
+                        {% if object.as_post %}
+                            <td>via mail</td>
+                        {% elif object.as_email %}
+                            <td>via e-mail</td>
+                        {% else %}
+                            <td></td>
+                        {% endif %}
+                        <td> <a href="{{ object.get_sells_detail_url }}">Detail</a> </td>
+                        <td> <a href="{% url 'sales:surveyorderpdf' object.pk %}">Pdf</a> </td>
+                     </tr>
+                    {% endfor %}
+                </tbody>
+        </table>
+        </row>
+    </div>
+{% endblock %}

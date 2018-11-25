@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% block content %}
+    <div>
+        <p><a href="{% url 'pListe:home' %}" class="btn btn-default">Zurück </a><span> Autoreload: </span><button id="refresh" class="btn btn-primary" >off</button></p>
+        <p id="touch" style="float:right">
+            <button id="clear" >Clear: </button><button id="search" >Suchen: </button> <input id="text" type="text" placeholder=" Enter something..."><div id="keyboard"></div>
+        <table id="demo-table" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th id="letsGo">Box</th>
+                    <th>{% trans "Kunde" %}</th>
+                    <th>{% trans "Hardware" %}</th>
+                    <th>{% trans "In Auftrag gegeben" %}</th>
+                    <th class="resizable">Status</th>
+                    <th style="width:10%">Check</th>
+                    <th class="resizable">{% trans "Spaeteste Fertigstellung" %}</th>
+                    <th class="resizable">{% trans "Ansprech" %}-<br>{% trans "partner" %}</th>
+                    <th>{% trans "Weeks" %}</th>
+                    <th>{% trans "Bemerkung" %}</th>
+                    <th>{% trans "Produktionsbemerkung" %}</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                {% if object.status == None and object.optional_status == None %}
+                    {% if object.box == 'XX' %}
+                        <tr style="background-color:#ffd7d7;">
+                    {% elif object.box == 'Xx' %}
+                        <tr style="background-color:#ffd7d7;">
+                    {% elif object.box == 'xX' %}
+                        <tr style="background-color:#ffd7d7;">
+                    {% elif object.box == 'xx' %}
+                        <tr style="background-color:#ffd7d7;">
+                    {% elif object.status == 'Test' %}
+                        <tr style="background-color:#c8fdc8;">
+                    {% else %}
+                        <tr style="background-color:yellow;">
+                    {% endif %}
+                {% elif object.status == 'Fertig' %}
+                    <tr style="background-color:#BFF2FF">
+                {% elif object.status == 'Vertrieb' %}
+                    <tr style="background-color:#ffd7d7">
+                {% else %}
+                    {% if object.changed == True %}
+                        {% if object.status == 'Test' %}
+                                <tr style="background-color:#c8fdc8" >
+                        {% elif object.box == 'XX' %}
+                            <tr style="background-color:#ffd7d7;">
+                        {% elif object.box == 'Xx' %}
+                            <tr style="background-color:#ffd7d7;">
+                        {% elif object.box == 'xX' %}
+                            <tr style="background-color:#ffd7d7;">
+                        {% elif object.box == 'xx' %}
+                            <tr style="background-color:#ffd7d7;">
+                        {% elif object.status == 'Test' %}
+                            <tr style="background-color:#c8fdc8;">
+                        {% else %}
+                                <tr style="background-color:yellow;">
+                        {% endif %}
+                    {% else %}
+                        {% if object.box == 'XX' %}
+                            <tr style="background-color:#ffd7d7;">
+                        {% elif object.box == 'Xx' %}
+                            <tr style="background-color:#ffd7d7;">
+                        {% elif object.box == 'xX' %}
+                            <tr style="background-color:#ffd7d7;">
+                        {% elif object.box == 'xx' %}
+                            <tr style="background-color:#ffd7d7;">
+                        {% elif object.status == 'Test' %}
+                            <tr style="background-color:#c8fdc8;">
+                        {% elif forloop.counter|divisibleby:2 %}
+                                <tr>
+                        {% else %}
+                                <tr style="background-color:#D3D3D3">
+                        {% endif %}
+                    {% endif %}
+                {% endif %}
+                    <td class="box-nr" scope="row"><p>
+                        {% if object.box|length < 2%} B00{{ object.box }}
+                        {% elif object.box|length < 3%} B0{{ object.box }}
+                        {% else %} B{{ object.box }} {% endif %}</p></td>
+                    <td id='column-header-9'>{{ object.customer }}</td>
+                    <td id='column-header-8'>{{ object.hardware|wordwrap:10 }}</td>
+                    <td id='column-header-7'>{{ object.created_at|date:"d.m.y" }}</td>
+                    <td id='column-header-6'>
+                        {% if object.status == 'Test' %}
+                            {{ object.status }}
+                        {% elif object.status == 'Fertig' %}
+                            {{ object.status }}
+                        {% elif object.status == 'Vertrieb' %}
+                            {{ object.status }}
+                        {% elif object.status == None %}
+                            {% if object.optional_status or object.optional_status == ' ' %}
+                                {{ object.optional_status }}
+                            {% else %}
+
+                            {% endif %}
+                        {% else %}
+                            {{ object.optional_status }}
+                        {% endif %}
+                    </td>
+                    <td>
+                        <p style="display:inline"><span>G {% if object.belt == True %}<img class="img-check" src="/static/check.png">{% else %}
+                            <img class="img-hidden" src="/static/empty.png">{% endif %}</span>
+                        <span>B {% if object.batterie == True %}<img class="img-check" src="/static/check.png">{% else %}
+                            <img class="img-hidden" src="/static/empty.png">{% endif %}</span>
+                        <span>E {% if object.elektronic == True %}<img class="img-check" src="/static/check.png">{% else %}
+                            <img class="img-hidden" src="/static/empty.png">{% endif %}</span>
+                        <span>M {% if object.assembled == True %}<img class="img-check" src="/static/check.png">{% else %}
+                            <img class="img-hidden" src="/static/empty.png">{% endif %}</span>
+                        <a class="btn btn-secondary btn-sm go-left own-btn" href="{% url 'pListe:updateProduction' object.pk %}">o</a>
+                        </p>
+                    </td>
+                    <td id='column-header-5'>{{ object.finished_until|date:"d.m.y"  }}</td>
+                    <td id='column-header-4'>{{ object.staff }}</td>
+                    <td id='column-header-3'>{{ object.time_in_weeks }}</td>
+                    <td id='column-header-2' class="remark">{% if object.remark == None %}
+                        &nbsp;
+                        {% else %}
+                        {{ object.remark|wordwrap:3 }}
+                        {% endif %}
+                    </td>
+                    <td id='column-header-1' class="remark">{% if object.production_remark == None %}
+                        &nbsp;
+                        {% else %}
+                        {{ object.production_remark|wordwrap:3 }}
+                        {% endif %}
+                    </td>
+                    <td><a class="own-btn" href="{{ object.get_update_url }}">Edit</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <a href="{% url 'pListe:create' %}" class="btn btn-default">Neuen Eintrag erstellen</a>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+    $(document).ready(function(){
+        $('#test').keyboard({
+        input: $input,
+        layout: 'qwerty',
+        css: {
+                // input & preview
+                input: 'form-control input-sm',
+                // keyboard container
+                container: 'center-block dropdown-menu', // jumbotron
+                // default state
+                buttonDefault: 'btn btn-default',
+                // hovered button
+                buttonHover: 'btn-primary',
+                // Action keys (e.g. Accept, Cancel, Tab, etc);
+                // this replaces "actionClass" option
+                buttonAction: 'active',
+                // used when disabling the decimal button {dec}
+                // when a decimal exists in the input area
+                buttonDisabled: 'disabled'
+            }
+        })
+        // activate the typing extension
+        .addTyping({
+            showTyping: true,
+            delay: 50
+        });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            if(navigator.userAgent.match(/Chrome/i)) {
+                $('#touch').show();
+                $('#clear').show();
+
+                $('#search').click(function() {
+                    var searchBox = $('input[type=text]').val();
+                    $("#demo-table .box-nr").each(function(){
+                        if ($(this).text().trim() == searchBox.toUpperCase()) {
+                            $(this).show();
+                        } else {
+                            $(this).parent().fadeOut();
+                        }
+                    });
+                });
+            } else {
+                $('#touch').hide();
+                $('#clear').hide();
+            }
+
+            $('#clear').click(function() {
+                $("#demo-table .box-nr").each(function(){
+                    $(this).parent().show();
+                });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#refresh').click(function() {
+                var auto = $('#refresh').html().trim();
+                if (auto == 'off') {
+                    $('#refresh').html('on');
+                    window.location.href='#stop';
+                    window.location.reload();
+                } else {
+                    $('#refresh').html('off');
+                    window.location.href = '#';
+                    setInterval(function() {
+                      window.location.reload();
+                    }, 300000);
+                }
+          });
+        });
+
+        (function(){
+            if (window.location.hash == '') {
+                setInterval(function() {
+                      window.location.reload();
+                    }, 300000);
+            } else {
+                $('#refresh').html('on');
+                setInterval(function() {
+                      alert('Autoreload ist aus');
+                    }, 300000);
+            }
+        }());
+    </script>
+{% endblock %}

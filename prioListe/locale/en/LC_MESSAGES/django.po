@@ -1,0 +1,111 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-09-08 07:19+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: prioritaeten_liste/settings.py:127
+msgid "English"
+msgstr "English"
+
+#: prioListe/forms.py:12 prioListe/forms.py:30
+msgid "Kiste: "
+msgstr "Box"
+
+#: prioListe/forms.py:13 prioListe/forms.py:31
+msgid "Kunde: "
+msgstr "Customer: "
+
+#: prioListe/forms.py:14 prioListe/forms.py:32
+msgid "Hardware: "
+msgstr "Hardware: "
+
+#: prioListe/forms.py:15 prioListe/forms.py:16 prioListe/forms.py:34
+#: prioListe/forms.py:35
+msgid "Status: "
+msgstr "Status: "
+
+#: prioListe/forms.py:17 prioListe/forms.py:37
+msgid "erstellt von Mitarbeiter: "
+msgstr "from Staff: "
+
+#: prioListe/forms.py:18 prioListe/forms.py:39
+msgid "Produktionsbemerkung: "
+msgstr "Production remark: "
+
+#: prioListe/forms.py:20 prioListe/forms.py:33
+msgid "Erstellt am: "
+msgstr "created at: "
+
+#: prioListe/forms.py:21 prioListe/forms.py:36
+msgid "Fertig bis: "
+msgstr "finished until: "
+
+#: prioListe/forms.py:22 prioListe/forms.py:38
+msgid "Zeit in Wochen: "
+msgstr "time in weeks"
+
+#: prioListe/forms.py:48
+msgid "Gurt"
+msgstr "Belt"
+
+#: prioListe/forms.py:49
+msgid "Batterie"
+msgstr "Batterie"
+
+#: prioListe/forms.py:50
+msgid "Elektronik"
+msgstr "Electronic"
+
+#: prioListe/forms.py:51
+msgid "Zusammengebaut"
+msgstr "Assembled"
+
+#: prioListe/templates/assignment_list.html:9
+msgid "Kunde"
+msgstr "Customer"
+
+#: prioListe/templates/assignment_list.html:10
+msgid "Hardware"
+msgstr "Hardware"
+
+#: prioListe/templates/assignment_list.html:11
+msgid "In Auftrag gegeben"
+msgstr "created at"
+
+#: prioListe/templates/assignment_list.html:14
+msgid "Spaeteste Fertigstellung"
+msgstr "finished until"
+
+#: prioListe/templates/assignment_list.html:15
+msgid "Ansprech"
+msgstr "contact"
+
+#: prioListe/templates/assignment_list.html:15
+msgid "partner"
+msgstr "person"
+
+#: prioListe/templates/assignment_list.html:16
+msgid "Weeks"
+msgstr "weeks"
+
+#: prioListe/templates/assignment_list.html:17
+msgid "Bemerkung"
+msgstr "Remark"
+
+#: prioListe/templates/assignment_list.html:18
+msgid "Produktionsbemerkung"
+msgstr "Production remark"

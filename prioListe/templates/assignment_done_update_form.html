@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}
+    <title>Shipping Board</title>
+{% endblock %}
+{% block content %}
+<div class="container" {%if  hardware_form %}
+     style="margin-top:4%; margin-left:10%"
+     {% else %} style="margin-top:4%"
+     {% endif %}>
+    <row>
+        <h2>Update Vnr.: <b>{{ obj.ordering_number }}</b></h2>
+        <h3>Customer: {{ obj.customer }}</h3>
+        <form action="." method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table class="table table-bordered">
+                {% for field in form %}
+                    {% if field.name == 'changed_by_ip' %}
+                        <tr class="ip_addr">
+                    {% else %}
+                        <tr>
+                    {% endif %}
+                        {% if field.name == 'hardware' %}
+                        <td><b>{{ field.label }}</b></td>
+                        <td>
+                            {% if hardware_form %}
+                            <table>
+                                <tr>
+                                    {% for hform in hardware_form %}
+                                        <td>{{ hform.as_p }}</td>
+                                    {% endfor %}
+                                </tr>
+                            </table>
+                            {% else %}
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <p class="help">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        {% else %}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <td style="color:chocolate; font-size: 1.2em"><b>{{ error }}</b></td>
+                                {% endfor %}
+                            {% else %}
+                                    <td><b>{{ field.label }}</b></td>
+                            {% endif %}
+                            <td>{{ field }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+            <div id="dialog" title="Error dialog">
+            <h3 id="dialog-text"></h3>
+        </div>
+            <input class="btn btn-primary btn-lg btn-block submiter" type="submit" value="Bestätigen" onmouseover="checkform()">
+        </form>
+        <br>
+        <a class="btn btn-warning btn-lg btn-block" href="{{ obj.get_delete_notice }}">Delete</a>
+        <a class="btn btn-secondary btn-lg btn-block" href="{% url 'pListe:done' %}">Zurück</a>
+    </row>
+</div>
+{% endblock %}

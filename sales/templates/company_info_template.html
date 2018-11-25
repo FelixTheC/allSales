@@ -1,0 +1,17 @@
+<table>
+    <tr>
+        {% if object.inc_or_gmbh == 'gmbh' %}
+            <td class="footer-td">COMPANY Foobar GmbH<br>
+                Geschaeftsfuehrer: Foo Bar, Bar Foo<br>
+                Sitz der Gesellschaft: Berlin<br>
+                Amtsgericht Charlottenburg XXX 00000
+            </td>
+        {% else %}
+            <td class="footer-td">COMPANY Foobar Inc<br>
+                3292 Ridgeway Drive, Suite C<br>
+                Town, XY 12345-6789<br>
+                USA
+            </td>
+        {% endif %}
+    </tr>
+</table>

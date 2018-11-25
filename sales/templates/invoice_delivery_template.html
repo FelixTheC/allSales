@@ -1,0 +1,96 @@
+<p style="font-size: 12px;">
+        Created at: <b> {{ object.created_at }} </b><br>
+        Process number: <b> {{ object.operation_Number }} </b><br>
+        <b>Contact Person: </b>{{ customer_name }} - {{ customer_mail }}<br>
+        You will receive a confimation of order from COMPANY Foobar for this order within the next days.
+    </p>
+    <h3>Customer number: <b>{{ object.contacts_faktura_id }}</b></h3>
+    <h1>Invoice and Delivery information</h1>
+    <table class="table">
+        <tr>
+           <td class="main-td">Invoice Address</td>
+            <td class="main-td">Delivery Address</td>
+        </tr>
+        <tr>
+            <td class="main-td">Organisation Name: <b>{{ object.customer_invoice_address.organisation_name }}</b></td>
+            {% if object.same_addr %}
+                <td class="main-td">Organisation Name: <b>{{ object.customer_invoice_address.organisation_name }}</b></td>
+            {% else %}
+                <td class="main-td">Organisation Name: <b>{{ object.delivery_addresse.delivery_organisation_name }}</b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td class="main-td">Address: <b>{{ object.customer_invoice_address.complete_addresse }}</b></td>
+            {% if object.same_addr %}
+                <td class="main-td">Address: <b>{{ object.customer_invoice_address.complete_addresse }}</b></td>
+            {% else %}
+                <td class="main-td">Address: <b>{{ object.delivery_addresse.delivery_complete_addresse }}</b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td class="main-td">Zip Code: <b>{{ object.customer_invoice_address.zip_code }}</b></td>
+            {% if object.same_addr %}
+                <td class="main-td">Zip Code: <b>{{ object.customer_invoice_address.zip_code }}</b></td>
+            {% else %}
+                <td class="main-td">Zip Code: <b>{{ object.delivery_addresse.delivery_zip_code }}</b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td class="main-td">City: <b>{{ object.customer_invoice_address.city }}</b></td>
+            {% if object.same_addr %}
+                <td class="main-td">City: <b>{{ object.customer_invoice_address.city }}</b></td>
+            {% else %}
+                <td class="main-td">City: <b>{{ object.delivery_addresse.delivery_city }}</b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td class="main-td">Country: <b>{{ object.customer_invoice_address.country }}</b></td>
+            {% if object.same_addr %}
+            <td class="main-td">Country: <b>{{ object.customer_invoice_address.country }}</b></td>
+            {% else %}
+            <td class="main-td">Country: <b>{{ object.delivery_addresse.delivery_country }}</b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td class="main-td">Contact Person: <b>{{ object.customer_invoice_address.contact_person }}</b></td>
+            {% if object.same_addr %}
+                <td class="main-td">Contact Person: <b>{{ object.customer_invoice_address.contact_person }}</b></td>
+            {% else %}
+                <td class="main-td">Contact Person: <b>{{ object.delivery_addresse.delivery_contact_person }}</b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td class="main-td">E-mail: <b>{{ object.customer_invoice_address.email_addresse }}</b></td>
+            {% if object.same_addr %}
+                <td class="main-td">E-mail: <b>{{ object.customer_invoice_address.email_addresse }}</b></td>
+            {% else %}
+                <td class="main-td">E-Mail: <b>{{ object.delivery_addresse.delivery_email_addresse }}</b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td class="main-td">Telephone: <b>{{ object.customer_invoice_address.telephone_nr }}</b></td>
+            {% if object.same_addr %}
+                <td class="main-td">Telephone: <b>{{ object.customer_invoice_address.telephone_nr }}</b></td>
+            {% else %}
+                <td class="main-td">Telephone: <b>{{ object.delivery_addresse.delivery_telephone_nr }}</b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td><br></td>
+            <td><br></td>
+        </tr>
+        <tr>
+            <td class="main-td">Payment Option: <b> {{ object.payment_option }} </b></td>
+            {% if less_than_12_weeks %}
+                <td class="main-td-red ">Delivery time: <b>{{ object.delivery_time }}</b></td>
+            {% else %}
+                <td class="main-td">Delivery time: <b>{{ object.delivery_time }}</b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td class="main-td">PO/order number: <b> {{ object.order_no }} </b></td>
+            {% if object.vat_ein_number %}
+                <td>VAT/EIN number: <b>{{ object.vat_ein_number }}</b></td>
+            {% endif %}
+        </tr>
+    </table>

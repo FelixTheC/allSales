@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load extra_tags %}
+{% block title %}
+    <title>Shipping Board</title>
+{% endblock %}
+{% block content %}
+    <div>
+        <p class="col-md-12 col-lg-12 fixed-search">
+        <span>
+            <a href="{% url 'pListe:home' %}" class="btn btn-info btn-sm" style="float:left; ">Back to Prio-Liste</a>
+            <a href="{% url 'main' %}" class="btn btn-info btn-sm" style="float:right; ">Back to Main-Page</a>
+        </span>
+        </p>
+        <div style="margin-bottom:1%;" class="fixed-search col-md-12 col-lg-12">
+            <form method="post" action="{% url 'pListe:prio_search' request.path %}" style="float:right; display: inline-grid; background-color:white">
+                {% csrf_token %}
+                {{ prio_search.as_p }}
+                <input type="submit" value="Search/Clear" class="btn btn-dark btn-sm">
+            </form>
+            <form method="post" action="{% url 'pListe:hardware_batterie' request.path %}" style="display: inline-grid; background-color:white">
+                {% csrf_token %}
+                {{ batterie_search.as_p }}
+                <input type="submit" value="Search/Clear" class="btn btn-dark btn-sm">
+            </form>
+        </div>
+        <div class="col-md-offset-12 col-lg-offset-12" style="z-index: 2; float: left">
+            <button id="back-to-top" class="btn btn-info" style="position: fixed; z-index: 3; margin-left: -4%;">To Top</button>
+        </div>
+
+        <table id="demo-table" class="table table-bordered tablesorter my-table col-md-12 col-lg-12">
+            <thead>
+                <tr>
+                    <th id="letsGo">Progress Nr.</th>
+                    <th>{% trans "Kunde" %}</th>
+                    <th>{% trans "Hardware" %}</th>
+                    <th>created at</th>
+                    <th class="resizable">{% trans "Ansprech" %}-<br>{% trans "partner" %}</th>
+                    <th>Comment</th>
+                    <th>Vnr</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                    <tr style="background-color:{{ object.get_staff_color }}">
+                    <td class="box-nr" scope="row"><p>
+                            {{ object.internal_progress_number }}
+                    </p></td>
+                    <td id='column-header-9'>{{ object.customer }}</td>
+                    <td id='column-header-8'>{{ object.hardware|safe|wordwrap:10 }}</td>
+                    <td id='column-header-11'>{{ object.last_change|date:"d.m.y" }}</td>
+                    <td id='column-header-4'>{{ object.staff }}
+                    {% if object.co_worker|length > 1 %}
+                        / {{ object.co_worker }}
+                    {% endif %}
+                    </td>
+                    <td id='column-header-2' class="remark remark_number_{{ forloop.counter0 }}">{% if object.remark == None %}
+                        &nbsp;
+                        {% else %}
+                            {{ object.remark|wordwrap:3 }}
+                        {% endif %}
+                        {% if object.prod_rec_one %}
+                            <a href="/media/{{ object.prod_rec_one }}">{{ object.prod_rec_one|cut_string }}</a>
+                        {% endif %}
+                        {% if object.prod_rec_two %}
+                            <br>
+                            <a href="/media/{{ object.prod_rec_two }}">{{ object.prod_rec_two|cut_string }}</a>
+                        {% endif %}
+                        {% if object.prod_rec_three %}
+                            <br>
+                            <a href="/media/{{ object.prod_rec_three }}">{{ object.prod_rec_three|cut_string }}</a>
+                        {% endif %}
+                        {% if object.prod_rec_four %}
+                            <br>
+                            <a href="/media/{{ object.prod_rec_four }}">{{ object.prod_rec_four|cut_string }}</a>
+                        {% endif %}
+                        {% if object.prod_rec_five %}
+                            <br>
+                            <a href="/media/{{ object.prod_rec_five }}">{{ object.prod_rec_five|cut_string }}</a>
+                        {% endif %}
+                        {% if 'Survey' in object.hardware%}
+                            <br>
+                            <a href="{{ object.create_productionrecord_reversed }}">Get ProductionRecord</a>
+                        {% endif %}
+                        {% if object.prod_rec_string %}
+                            {% for file in object.prod_rec_string|string_to_list %}
+                                {% if file != 'None' %}
+                                    {% if file != '' %}
+                                        <a href="/media{{ file }}">{{ file|cut_string }}</a>
+                                        <br>
+                                    {% endif %}
+                                {% endif  %}
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td>{{ object.ordering_number }}</td>
+                    <td><a class="own-btn" href="{{ object.get_comment_update_only }}">Edit</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+<div id="dialog" title="Error">
+    <p>Dies ist ein älterer Eintrag der diese Funktion nicht unterstützt. <br> <i>This is an older entry that does not support this feature</i></p>
+</div>
+{% endblock %}
+{% block script %}
+<script>
+setTimeout("document.location.reload();", 300000);
+//setTimeout("document.location.reload();", 3000);
+
+    $(function() {
+        var thHeight = $("table#demo-table th:first").height();
+        $("table#demo-table th").resizable({
+          handles: "e",
+          minHeight: thHeight,
+          maxHeight: thHeight,
+          minWidth: 40,
+          resize: function (event, ui) {
+            var sizerID = "#" + $(event.target).attr("id") + "-sizer";
+            $(sizerID).width(ui.size.width);
+          }
+        });
+    });
+
+</script>
+<script>
+    $(document).ready(function() {
+	    if($(window).width() < 500) {
+	       window.close();
+	    }
+	    $("#demo-table").tablesorter();
+
+        // if(navigator.userAgent.match(/Chrome/i)) {
+		 //    $('#touch').show();
+		 //    $('#clear').show();
+        //
+        //     $('#search').click(function() {
+        //         var searchBox = $('input[type=text]').val();
+        //         $("#demo-table .box-nr").each(function(){
+        //             if ($(this).text().trim() == searchBox.toUpperCase()) {
+        //                 $(this).show();
+        //             } else {
+        //                 $(this).parent().fadeOut();
+        //             }
+        //         });
+        //     });
+        // } else {
+        //     $('#touch').hide();
+        //     $('#clear').hide();
+        // }
+
+        $('#clear').click(function() {
+            $("#demo-table .box-nr").each(function(){
+                $(this).parent().show();
+            });
+        });
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+        $(window).scrollTop();
+        // $('#back-to-top').hide();
+        // $(document).mousemove(function(e) {
+        //     if ($(document).scrollTop() > 300) {
+        //         $('#back-to-top').show();
+        //     } else {
+        //         $('#back-to-top').hide();
+        //     }
+        // });
+
+        $('#back-to-top').click(function(){
+            $("html, body").animate({ scrollTop: 0 }, 10);
+            return false;
+        });
+
+        $('#refresh').click(function() {
+            var auto = $('#refresh').html().trim();
+            if (auto == 'off') {
+                $('#refresh').html('on');
+                window.location.href='#stop';
+                window.location.href.reload();
+            } else {
+                $('#refresh').html('off');
+                window.location.href = '#';
+                setInterval(function() {
+                  window.location.reload();
+                }, 300000);
+            }
+      });
+    });
+
+    (function(){
+        if (window.location.hash == '') {
+            setInterval(function() {
+                  window.location.href.reload();
+                }, 300000);
+        } else {
+            $('#refresh').html('on');
+            setInterval(function() {
+                  alert('Autoreload ist aus');
+                }, 300000);
+        }
+    }());
+</script>
+<script>
+
+    function generateMarginToTopBtn() {
+        var marginTop = $(window).height() - $('#back-to-top').offset().top - $('#back-to-top').height() - 20;
+            $('#back-to-top').css('margin-top', marginTop.toString() + 'px');
+        }
+
+    $(document).ready(function () {
+
+        generateMarginToTopBtn();
+
+        var dialog = '#dialog';
+        $(dialog).hide();
+
+        if (window.location.href.indexOf('?') > 0) {
+
+            window.setTimeout(activateScrolling, 2000);
+
+            var location = window.location.href.split('?');
+            if(location[1].trim() == 'error') {
+                $(dialog).dialog();
+                $(dialog).on('dialogclose', function(event) {
+                    window.location.replace(location[0]);
+                });
+            }
+            if (location[1].indexOf('obj') > -1) {
+                var objLocation = location[1].split('=');
+                jumpToObject(objLocation[1]);
+            }
+
+            function jumpToObject(progressNr) {
+                var top = $(".box-nr p:contains("+ progressNr +")").offset().top;
+                $("html, body").animate({ scrollTop: top - 300}, 10);
+
+            }
+
+            function activateScrolling() {
+                $(document).scroll(function() {
+                    var location = window.location.href.split('?');
+                    history.pushState(null, null, location[0]);
+                });
+            }
+        }
+
+    });
+</script>
+{% endblock %}

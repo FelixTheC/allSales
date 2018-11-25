@@ -1,0 +1,97 @@
+{% load staticfiles %}
+{% include 'basePdf.html' %}
+
+{% block extra_style %}
+    <style type="text/css">
+        @page {
+            size: A4 portrait;
+            margin: 1cm;
+        }
+        .main-td {
+            height: 20;
+            font-size: 12px;
+            margin: 0 0 0 10px;
+        }
+        .main-td-red {
+            height: 20;
+            font-size: 12px;
+            margin: 0 0 0 10px;
+            color: red;
+        }
+        .footer-td {
+            height: 50;
+            font-size: 12px;
+            color: grey;
+        }
+        th {
+            margin: 0 0 0 -60px;
+            height: 24;
+            font-size: 12px;
+        }
+        .main-title {
+            margin: 0 0 0 100px;
+        }
+        h1 {
+            color: blue;
+        }
+    </style>
+{% endblock %}
+<div>
+    <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        <img src="/static/new_logo_2.png" alt="logo" height="120px"></p>
+    <p class="main-title" style="color:blue; font-size: 18px;">
+        {% block title %}
+
+        {% endblock %}
+    </p>
+    {% include 'invoice_delivery_template.html' %}
+    <h1>1. Composition of the collar:</h1>
+        {% block collar_composition %}
+            {% include 'collar_design_template.html' %}
+        {% endblock %}
+    <p>_________________________________________________________________________________________________________________________________</p>
+    {% include 'company_info_template.html' %}
+    <br>
+    <br>
+    <br>
+    <br>
+    <h1>2. Programming of the collar</h1>
+        {% include 'collar_programming_template.html' %}
+    <br>
+    <h1>3. Collar Communication</h1>
+    <table class="table" style="border: 1px solid black;">
+        {% block comunication %}
+
+        {% endblock %}
+    </table>
+    <br>
+    <h1>4. Drop Off options</h1>
+    <table class="table" style="border: 1px solid black;">
+        {% block dropoff %}
+
+        {% endblock %}
+    </table>
+    <br>
+    {% include 'frequency_furtherinst_template.html' %}
+    {% block extras %}
+
+    {% endblock %}
+</div>
+<div>
+    <p>_________________________________________________________________________________________________________________________________</p>
+    {% include 'company_info_template.html' %}
+</div>
+</body>
+</html>

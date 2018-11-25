@@ -1,0 +1,82 @@
+{% extends 'collar_order_pdf_template.html' %}
+{% load extra_tags %}
+
+{% block title %}
+    <b>Final Collar Specification for a Survey Collar order</b>
+{% endblock %}
+
+{% block comunication %}
+    <tr>
+        <td class="main-td">GLOBALSTAR: <b>{{ object.globalstar }}</b></td>
+        <td class="main-td">IRIDIUM: <b>{{ object.iridium }}</b></td>
+    </tr>
+    <tr>
+        {% if object.iridium_num_of_fixes_gps %}
+            <td class="main-td">IRIDIUM amount of GPS positions: <b>
+                {% if object.iridium_num_of_fixes_gps %}
+                    {{ object.iridium_num_of_fixes_gps }}
+                {% else %}
+                    not specified
+                {% endif %}
+            </b></td>
+            <td class="main-td">IRIDIUM Contract type: <b>{{ object.iridium_contract_type }}</b></td>
+        {% else %}
+            <td class="main-td">---</td>
+            <td class="main-td">---</td>
+        {% endif %}
+    </tr>
+    <tr>
+        <td class="main-td">Airtime fee contact name: <b>
+            {% if object.contact_name_airtime_fee %}
+                {{ object.contact_name_airtime_fee }}</b></td>
+            {% else %}
+                not specified
+            {% endif %}
+        <td class="main-td">Airtime fee contact e-mail: <b>
+            {% if object.contact_mail_airtime_fee %}
+                {{ object.contact_mail_airtime_fee }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+    </tr>
+    <tr>
+        {% if object.airtime_contract %}
+            <td class="main-td">Uploaded an airtime fee contract: <b>True</b></td>
+        {% else %}
+            <td class="main-td">Uploaded an airtime fee contract: <b>False</b></td>
+        {% endif %}
+        <td class="main-td"></td>
+    </tr>
+{% endblock %}
+
+{% block dropoff %}
+    <tr>
+        <td class="main-td">External Drop Off: <b>{% if object.external_dropoff %}
+                {{ object.external_dropoff_controll }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+        {% if object.cotton_layers %}
+            <td class="main-td">Cotton spacer: <b>{{ object.cotton_layers }}</b></td>
+        {% else %}
+            <td class="main-td">Cotton spacer: <b>not specified</b></td>
+        {% endif %}
+    </tr>
+    <tr>
+        <td class="main-td">E. Drop Off RELATIVE mode: <b>
+            {% if object.external_dropoff_real_time %}
+                {{ object.external_dropoff_real_time }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+        <td class="main-td">E. Drop Off ABSOLUTE mode: <b>
+            {% if object.external_dropoff_abs_time %}
+                {{ object.external_dropoff_abs_time }}</b></td>
+            {% else %}
+                not specified
+            {% endif %}
+    </tr>
+{% endblock %}

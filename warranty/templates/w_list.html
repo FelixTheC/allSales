@@ -1,0 +1,141 @@
+{% extends 'w_base.html' %}
+{% load i18n %}
+{% block content %}
+    <div class="container-fluid">
+        <p><a href="{% url 'warranty:create' %}" class="btn btn-default">Neuen Eintrag erstellen</a>
+            <span>Autoreload: </span><button id="refresh" class="btn btn-primary" >off</button>
+            <span><a href="{% url 'main' %}" class="btn btn-info btn-sm" style="float:right">Back to Main-Page</a></span>
+            <form action="{% url 'warranty:search' %}" method="post">
+                {% csrf_token %}
+                <input type="text" name="searchfield">
+                <input type="submit" class="btn btn-primary btn-sm" value="Search">
+                <a href="{% url 'warranty:home' %}" class="btn btn-secondary btn-sm">Clear</a>
+            </form>
+        </p>
+        <div class="col-md-offset-11 col-lg-offset-11 col-md-1 col-lg-1" style="z-index: 2">
+            <button id="back-to-top" class="btn btn-info" style="position: fixed; margin-top:30%;">To Top</button>
+        </div>
+        <table id="demo-table" class="table table-bordered tablesorter">
+            <thead>
+            <tr>
+                    <th>Date</th>
+                    <th>Collar ID</th>
+                    <th>Contact Person</th>
+                    <th>Customer Name</th>
+                    <th>Comment</th>
+                    <th>Collar Type</th>
+                    <th>Customer<br>Country</th>
+                    <th>Date of delivery</th>
+                    <th>Date of collar failure</th>
+                    <th>Lifetime</th>
+                    <th>Date of complaint</th>
+                    <th>Description of failure</th>
+                    <th>Following action</th>
+                    <th>Repla<br>cement<br>Yes/No</th>
+                    <th>File</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for object in object_list %}
+                <tr style="{% cycle 'background-color:#D3D3D3' '' %}">
+                    <td style="width:5%">{{ object.date|wordwrap:20|linebreaksbr }}</td>
+                    <td style="width:5%">{% for collar in object.customer_collar.all %}
+                            {{ collar.serialno|wordwrap:10|linebreaksbr }},
+                        {% endfor %}</td>
+                    <td style="width:4%">{{ object.contact_person|wordwrap:20|linebreaksbr }}</td>
+                    <td style="width:14%">{% for collar in object.customer_collar.all %}
+                        {% if forloop.first %}
+                            {{ collar.customer}} /
+                            {{ collar.customerorganization }}
+                        {% endif %}
+                        {% endfor %}</td>
+                    <td>{{ object.comment|wordwrap:15|linebreaksbr }}</td>
+                    <td>{% for collar in object.customer_collar.all %}
+                        {% if forloop.first %}
+                            {{ collar.producttype|wordwrap:15|linebreaksbr }}
+                        {% endif %}
+                        {% endfor %}</td>
+                    <td style="width:5%">
+                        {% for collar in object.customer_collar.all %}
+                        {% if forloop.first %}
+                            {{ collar.customercountry|wordwrap:15|linebreaksbr }}
+                        {% endif%}
+                        {% endfor %}</td>
+                    <td>{{ object.date_delivery|wordwrap:30|linebreaksbr }}</td>
+                    <td>{{ object.date_collar_failure }}</td>
+                    <td>{{ object.lifetime }}</td>
+                    <td>{{ object.date_complaint|wordwrap:30|linebreaksbr }}</td>
+                    <td>{{ object.description_failure|wordwrap:20|linebreaksbr }}</td>
+                    <td>{{ object.following_action|wordwrap:25|linebreaksbr }}</td>
+                    <td>{{ object.replacement|wordwrap:25|linebreaksbr }}</td>
+                    <td>{% if object.warranty_file %}
+                            <a href="/media/{{ object.warranty_file }}">X</a>
+                        {% endif %}
+                    </td>
+                    <td><a class="own-btn" href="{{ object.get_update_url }}">Edit</a></td>
+                    <td><a class="own-btn btn-danger" href="{{ object.get_update_deleted_url }}">Delete</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+<script>
+    $(document).ready(function() {
+        setTimeout("document.location.reload();", 300000);
+        $("#demo-table").tablesorter();
+
+    });
+</script>
+
+<script>
+    $(document).ready(function() {
+
+        $('#back-to-top').hide();
+        $(document).mousemove(function(e) {
+            if ($(document).scrollTop() > 300) {
+                $('#back-to-top').show();
+            } else {
+                $('#back-to-top').hide();
+            }
+        });
+
+        $('#back-to-top').click(function(){
+            $("html, body").animate({ scrollTop: 0 }, 10);
+            return false;
+        });
+
+        $('#refresh').click(function() {
+            var auto = $('#refresh').html().trim();
+            if (auto == 'off') {
+                $('#refresh').html('on');
+                window.location.href='#stop';
+                window.location.href.reload();
+            } else {
+                $('#refresh').html('off');
+                window.location.href = '#';
+                setInterval(function() {
+                  window.location.href.reload();
+                }, 300000);
+            }
+      });
+    });
+
+    (function(){
+        if (window.location.hash == '') {
+            setInterval(function() {
+                  window.location.href.reload();
+                }, 300000);
+        } else {
+            $('#refresh').html('on');
+            setInterval(function() {
+                  alert('Autoreload ist aus');
+                }, 300000);
+        }
+    }());
+</script>
+{% endblock %}

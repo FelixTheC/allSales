@@ -1,0 +1,40 @@
+{% extends 'rma_base.html' %}
+{% load i18n %}
+{% block content %}
+<div class="container" style="margin-top:4%">
+    <row>
+        <form method="post" action="" class="row" enctype="multipart/form-data">
+            {% csrf_token %}
+            {% for field in form %}
+                {% if field.id_for_label != id_parcel_received %}
+                    <div class="col-5">
+                {% else %}
+                    <div style="margin-left:37%" >
+                {% endif %}
+                    <label style="display:block">{{ field.label }}</label>
+                    {{ field }}
+                </div>
+            {% endfor %}
+            <input type="submit" value="Submit" class="btn btn-primary btn-lg btn-block" style="margin-top:2%">
+            <a href="{% url 'rma:home'%}" class="btn btn-secondary btn-lg btn-block">Back</a>
+        </form>
+    </row>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    $(document).ready(function(){
+        $('#id_parcel_received').datepicker({
+            dateFormat: 'yy-mm-dd',
+        });
+        //$('#id_parcel_received').datepicker().datepicker('setDate', new Date());
+    });
+
+    $(function() {
+        $('#id_parcel_received').datepicker({
+            dateFormat: 'yy-mm-dd',
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,14 @@
+<p style="font-size: 12px">Further Instructions: <span>
+    {% if object.comment %}
+        <b>{{ object.comment }}</b>
+    {% else %}
+        not specified
+    {% endif %}
+</span></p>
+<p style="font-size: 12px; margin: 0 0 {{ space }}em;">VHF beacon frequencies: <b>
+    {% if object.vhf_beacon_frequency %}
+        {{ object.vhf_beacon_frequency }}
+    {% else %}
+        not specified
+    {% endif %}
+</b></p>

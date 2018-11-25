@@ -1,0 +1,409 @@
+{% include 'basePdf.html' %}
+{% load extra_tags %}
+{% block extra_style %}
+<style>
+    @page {
+        size: A4 landscape;
+        margin: 1cm;
+    }
+    .normal {
+        font-size: 14px;
+    }
+    .normal-red {
+        font-size: 14px;
+        color: chocolate;
+    }
+    .normal-red-p {
+        font-size: 14px;
+        color: chocolate;
+        display: inline;
+    }
+    span {
+        font-size: 14px;
+    }
+    .table {
+        padding: 2px;
+        text-align: center;
+    }
+    .t_table {
+        padding: 2px;
+        font-size: 12px !important;
+    }
+    .d_table {
+        padding: 2px 10px 0 10px;
+        font-size: 12px !important;
+    }
+    .c_table {
+        padding: 2px;
+        font-size: 12px !important;
+    }
+    .normal-head-table {
+        padding: 0 0 0 6em;
+        font-size: 14px;
+    }
+    .red-programming-table {
+        padding: -0.25em 0 0 -8em;
+        font-size: 14px;
+        color: chocolate;
+    }
+    .black-programming-table {
+        padding: -0.25em 0 0 -8em;
+        font-size: 14px;
+        color: black;
+    }
+    .row-bottom-space {
+        padding: 0 0 0.5em 0;
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div>
+<!-- Begin Kopfbereich -->
+    <p style="margin: 0 0 0 75em;">
+        <img src="/static/newlogo.png" alt="logo" height="100px">
+    </p>
+</div>
+<div>
+    <p style="font-size:22px;color:#37b74e;margin:0 0 0 15em;">
+        <b>{{ object.get_model_type|upper }} Collar {{ test|safe }}Production Record</b>
+    </p>
+
+    <table style="cellspacing: 10em;">
+        <tr>
+            {% if object.globalstar %}
+                <td class="normal">Type of Collar: <span><b>{{ object.get_model_type }} GLOBALSTAR</b></span></td>
+            {% elif object.iridium %}
+                <td class="normal">Type of Collar: <span><b>{{ object.get_model_type }} IRIDIUM</b></span></td>
+            {% elif object.gsm %}
+                <td class="normal">Type of Collar: <span><b>{{ object.get_model_type }} GSM</b></span></td>
+            {% elif object.store_on_board %}
+                <td class="normal">Type of Collar: <span><b>{{ object.get_model_type }} SOB</b></span></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td class="normal">No. of Collars: <span><b>{{ sum_collar }}</b></span></td>
+            <td class="normal-head-table">Customer Name: <span><b>{{ object.customer_invoice_address.contact_person }}</b></span></td>
+        </tr>
+        <tr>
+            <td class="normal">Progress No.: <span><b>{{ progress_number }}</b></span></td>
+            <td class="normal-head-table">Species: <span><b>{{ prod_rec_first.animal_species }}</b></span></td>
+        </tr>
+        <tr>
+            {% if co_worker %}
+                <td class="normal">Staff: <span><b>{{ object.customer_staff }}/{{ co_worker }}</b></span></td>
+            {% else %}
+                <td class="normal">Staff: <span><b>{{ object.customer_staff }}</b></span></td>
+            {% endif %}
+            <td class="normal-head-table">Finished until: <span><b>{{ finished_until|date:"d.m.y" }}</b></span></td>
+        </tr>
+        <tr>
+            <td class="normal">Date: <span><b>{{ date|date:"d.m.y" }}</b></span></td>
+            <td class="normal-head-table">Vnr.: <span><b>{{ object.operation_Number }}</b></span></td>
+        </tr>
+    </table>
+<!-- End Kopfbereich -->
+    <br>
+<!-- Begin Tabelle -->
+    <table style="border: 1px solid black;">
+        <tbody style="font-size: 14px;">
+            <tr>
+                <th class="d_table"></th>
+                <th class="table">No</th>
+                <th class="table">Size<br>[cm]</th>
+                <th class="table">Width<br>[mm]</th>
+                <th class="table">Shape</th>
+                <th class="table">Thick<br>ness</th>
+                <th class="table">Colour</th>
+                <th class="table">Punchin<br>g1 [cm]</th>
+                <th class="table">Punch<br>ing2</th>
+                {% if object.prod_rec_first.protective_belt %}
+                    <th class="table">Prot.<br>belt</th>
+                {% endif %}
+                <th class="table">Housing</th>
+                <th class="table">Antenna</th>
+                <th class="table">External Drop Off</th>
+                <th class="table">Cotton Layer</th>
+                <th class="table">Edge</th>
+                <th class="table">Label<br>plates</th>
+                <th class="table">Belt<br>label<br>info</th>
+                <th class="table">Reflective<br> Stripes</th>
+            </tr>
+            {% for p in prod_rec %}
+                <tr>
+                    <td class="c_table">{{ forloop.counter }}.)</td>
+                    <td class="table">{{ amount|get_index:forloop.counter0 }}</td>
+                    <td class="table">{{ sizes|get_index:forloop.counter0|replace_with_empty:'cm' }}</td>
+                    <td class="table">{{ object.belt_width|replace_with_empty:'mm' }}</td>
+                    <td class="table">{{ object.belt_shape|replace_with_empty:'-shaped' }}</td>
+                    <td class="table">{{ object.belt_thickness|split_by_space_return_second }}</td>
+                    {% if object.other_color %}
+                        <td class="table">see<br>comments</td>
+                    {% else %}
+                        <td class="table">{{ object.belt_colour|lower }}</td>
+                    {% endif %}
+                    <td class="t_table"><span>+{{ p.punching1_pos }}<b>á</b>{{ p.punching1_dist }}</span>
+                        <br><span>-{{ p.punching1_neg }}<b>á</b>{{ p.punching1_dist }}</span></td>
+                    {% if p.punching2 != ' ' %}
+                        <td class="table">{{ p.punching2 }}</td>
+                    {% else %}
+                        <td class="table">______</td>
+                    {% endif %}
+                    {% if object.prod_rec_first.protective_belt %}
+                        <td class="table">{{ prod_rec_first.protective_belt }}</td>
+                    {% endif %}
+                    <td class="table">{{ object.get_model_type }} {{ battery_sizes|get_index:forloop.counter0 }}</td>
+                    <td class="table">VHF</td>
+                    {% if object.external_dropoff %}
+                        <td class="table normal-red">
+                            Yes
+                        {% else %}
+                        <td class="table">
+                            No
+                        {% endif %}
+                    </td>
+                    {% if object.cotton_layers %}
+                        <td class="table normal-red-p">{{ object.cotton_layers }}</td>
+                    {% else %}
+                        <td class="table">No</td>
+                    {% endif %}
+                    {% if object.belt_edge == 'round' %}
+                        <td class="table normal-red-p">Yes</td>
+                    {% else %}
+                        <td class="table">No</td>
+                    {% endif %}
+                    {% if object.belt_labeling %}
+                        <td class="table normal-red-p">Yes</td>
+                    {% else %}
+                        <td class="table">No</td>
+                    {% endif %}
+                    {% if object.belt_plates%}
+                        <td class="table normal-red-p">Yes</td>
+                    {% else %}
+                        <td class="table">No</td>
+                    {% endif %}
+                    {% if object.reflective_stripes %}
+                        <td class="table normal-red-p">Yes</td>
+                    {% else %}
+                        <td class="table">No</td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+<!-- End Tabelle -->
+<!-- Begin Belt Comments -->
+    <p class="normal"><b style="color:chocolate;">Comments:
+        {% for p in prod_rec %}
+            {% if p.further_instructions_belt %}
+                {{ p.further_instructions_belt }}
+                <br>
+            {% endif %}
+        {% endfor %}
+        {% if object.other_color %}
+            Color: <i>{{ object.belt_colour }}</i> comment: {{ object.other_color }}
+        {% endif %}</b>
+        <span></span>
+    </p>
+<!-- End Belt Comments -->
+<!-- Begin Drop Off -->
+{% if prod_len == 1 %}
+    <table style="margin: 0 0 12em;">
+{% elif prod_len == 2 %}
+    <table style="margin: 0 0 10em;">
+{% elif prod_len == 3 %}
+    <table style="margin: 0 0 4em;">
+{% else %}
+    <table>
+{% endif %}
+        <tr>
+            {% if object.belt_plates_instructions %}
+                <td class="normal">Beltlabelinfo: <b>{{ object.belt_plates_instructions }}</b></td>
+            {% else %}
+                <td class="normal">Beltlabelinfo: </td>
+            {% endif %}
+        </tr>
+        <tr class="row-bottom-space">
+            {% if object.belt_labeling_instructions %}
+                <td class="normal">Label plates instructions: <b>{{ object.belt_labeling_instructions }}</b></td>
+            {% else %}
+                <td class="normal">Label plates instructions: </td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td class="normal"><b>External Drop Off:</b></td>
+            {% if object.internal_dropoff %}
+                <td class="normal"><b>Internal Drop Off:</b>Yes</td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td class="normal">Release mode:
+                {% if object.external_dropoff_real_time or object.internal_dropoff_real_time %}
+                    <b>Relative</b>
+                {% else %}
+                    {% if object.external_dropoff or object.internal_dropoff %}
+                        <b>Absolute</b>
+                    {% else %}
+                        <b></b>
+                    {% endif %}
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td class="normal">Relative Release time: <span>
+                {% if object.external_dropoff_real_time %}
+                    <b>{{ object.external_dropoff_real_time }}</b>
+                {% elif object.internal_dropoff_real_time %}
+                    <b>{{ object.internal_dropoff_real_time }}</b>
+                {% endif %}
+            </span></td>
+        </tr>
+        <tr>
+            <td class="normal">Absolute Release time: <span>
+                {% if object.external_dropoff_abs_time %}
+                    <b>{{ object.external_dropoff_abs_time }}</b>
+                {% elif object.internal_dropoff_abs_time %}
+                    <b>{{ object.internal_dropoff_abs_time }}</b>
+                {% endif %}
+            </span></td>
+        </tr>
+        <tr class="row-bottom-space">
+            <td class="normal">Radio Firing (disabled):
+                {% if 'TimerAndRadio' in object.external_dropoff_controll or 'TimerAndRadio' in object.internal_dropoff_controll%}
+                    <b>enabled</b>
+                {% else %}
+                    <b>disabled</b>
+                {% endif %}
+            </td>
+        </tr>
+        <!--<tr>-->
+            <!--<td class="normal" style="margin: -4em 0 0 0"><b>Path: </b><span>{{ prod_rec_first.path_customer_folder }}</span></td>-->
+        <!--</tr>-->
+    </table>
+<!-- End Drop Off -->
+<!--############ End Page 1 ############-->
+<!--############ Begin Page 2 ############-->
+    <div>
+<!-- Begin Kopfbereich -->
+    <!--<p style="margin: 0 0 0 75em;">-->
+        <!--<img src="/static/newlogo.png" alt="logo" height="100px">-->
+    <!--</p>-->
+</div>
+<!-- Begin Programming -->
+    <br><br>
+    <span class="normal">VHF Beacon Frequency (151.000) MHz:</span>
+        <br>
+        {% with list_frequencies=object.vhf_beacon_frequency|split_by_arg:' ' %}
+            {% for frequence in list_frequencies %}
+                    <span class="normal-red-p">{{ frequence }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                    {% if forloop.counter|divisibleby:"12" %}
+                        <br>
+                    {% endif %}
+            {% endfor %}
+        {% endwith %}
+    <br><br>
+    <table>
+        <tr class="row-bottom-space">
+            <td class="normal">Type of Collar:</td>
+            {% if object.globalstar %}
+                <td class="black-programming-table"><b>{{ object.get_model_type }} GLOBALSTAR</b></td>
+            {% elif object.iridium %}
+                <td class="black-programming-table"><b>{{ object.get_model_type }} IRIDIUM</b></td>
+            {% endif %}
+        </tr>
+        <tr class="row-bottom-space">
+            <td class="normal">VHF Power (10 dBm):</td>
+            <td class="red-programming-table"></td>
+        </tr>
+        <tr class="row-bottom-space">
+            <td class="normal">UTC Correction (0):</td>
+            {% if object.utc_correction %}
+                <td class="red-programming-table">{{ object.utc_correction }}</td>
+            {% else %}
+                <td class="red-programming-table"></td>
+            {% endif %}
+        </tr>
+        <tr class="row-bottom-space">
+            <td class="normal">GPS Skip Count (0 - Transmit each Fix):</td>
+            <td class="red-programming-table"></td>
+        </tr>
+        <tr class="row-bottom-space">
+            <td class="normal">Mortality (On):</td>
+            <td class="red-programming-table"></td>
+        </tr>
+        <tr class="row-bottom-space">
+            <td class="normal">Mortality Period (24h):</td>
+            {% if object.mortality_sensor %}
+                <td class="red-programming-table">{{ object.mortality_sensor }}</td>
+            {% else %}
+                <td class="red-programming-table"></td>
+            {% endif %}
+        </tr>
+        <tr class="row-bottom-space">
+            <td class="normal">Proximity Transmit Mode (Off):</td>
+            {% if object.id_tag %}
+                <td class="red-programming-table">on</td>
+            {% else %}
+                <td class="red-programming-table"></td>
+            {% endif %}
+        </tr>
+        {% if object.globalstar %}
+            <tr class="row-bottom-space">
+                <td class="normal"><span class="normal-red">GLOBALSTAR</span> Mode (1 - Fixes per Message)::</td>
+                {% if prod_rec_first.gl_fixes_per_message != 1 %}
+                    <td class="red-programming-table">{{ prod_rec_first.gl_fixes_per_message }}</td>
+                {% else %}
+                    <td class="red-programming-table"></td>
+                {% endif %}
+            </tr>
+            <tr class="row-bottom-space">
+                <td class="normal"><span class="normal-red">GLOBALSTAR</span> No. of Attempts (3):</td>
+                {% if prod_rec_first.gl_no_of_attempts != 3 %}
+                    <td class="red-programming-table">{{ prod_rec_first.gl_no_of_attempts }}</td>
+                {% else %}
+                    <td class="red-programming-table"></td>
+                {% endif %}
+            </tr>
+        {% elif object.iridium %}
+            <tr class="row-bottom-space">
+                <td class="normal"><span class="normal-red">IRIDIUM</span> Mode (0 - No IRIDIUM):</td>
+                <td class="red-programming-table">{{ prod_rec_first.ir_fixes_per_message }}</td>
+            </tr>
+            <tr class="row-bottom-space">
+                <td class="normal"><span class="normal-red">IRIDIUM</span> Contract Type:</td>
+                {% if object.iridium_contract_type %}
+                    <td class="red-programming-table">{{ object.iridium_contract_type }}</td>
+                {% else %}
+                    <td class="red-programming-table">{{ prod_rec_first.ir_contract_type }}</td>
+                {% endif %}
+            </tr>
+        {% endif %}
+        <tr class="row-bottom-space">
+            <td class="normal">VHF Beacon Pattern (Mode 0):</td>
+            <td class="red-programming-table"></td>
+        </tr>
+<!-- End Programming -->
+<!-- Begin GPS -->
+        <tr>
+            <td class="normal">GPS Schedule:</td>
+            <td class="red-programming-table">{{ prod_rec_first.gps_schedule_name }}</td>
+        </tr>
+        <tr class="row-bottom-space">
+            <td class="normal">VHF Schedule:</td>
+            <td class="red-programming-table">{{ prod_rec_first.vhf_schedule_name }}</td>
+        </tr>
+        <tr class="row-bottom-space">
+            <td class="normal">Notification eMail:</td>
+            <td class="red-programming-table">{{ object.notification_mail }}</td>
+        </tr>
+        <tr class="row-bottom-space">
+            <td class="normal-red">Notification SMS:</td>
+            <td class="red-programming-table">{{ object.notification_sms }}</td>
+        </tr>
+    </table>
+    <p class="normal-red"><b>Comments: </b><span class="normal-red">{{ prod_rec_first.further_instructions_programming }}</span></p>
+<!-- End GPS -->
+    <p class="normal"><b>Path: </b><span>{{ prod_rec_first.path_customer_folder }}</span></p>
+    {{ test|safe }}
+<!--############ End Page 2 ############-->
+</div>
+{% endblock %}

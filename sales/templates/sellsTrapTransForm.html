@@ -1,0 +1,79 @@
+{% extends 'sales_base.html' %}
+{% load extra_tags %}
+{% block extra_style %}
+    {% include 'surveystyle.html' %}
+{% endblock %}
+{% block content %}
+    <div class="col-sm-12 col-md-12 col-lg-12">
+    <div class="col-md-offset-2 col-lg-offset-2 col-md-9 col-lg-9">
+        <h2><b>Edit</b> {{ type }} collar order <b>{{ operationNumber }}</b></h2>
+    </div>
+        {% include 'collar_update_form_without_animal.html' %}
+        <div class="form-group col-xs-12 col-sm-offset-2 col-sm-4 col-lg-offset-1 col-md-offset-1 col-md-3 col-lg-3 inputform">
+            <h2 onmouseover="location.reload();">For Production-Record </h2>
+            {% if count_prod_rec < max_num %}
+                {% if count_prod_rec < 1 %}
+                    <a href="{% url 'sales:ttprodrec' pk %}"
+                       target="_blank"
+                       onClick="window.open('{% url 'sales:ttinitialprodrec' pk %}','pagename',
+                       'resizable,height=900,width=450,left=' + (parseInt(window.innerWidth) * 0.85) + ',top=100');
+                        return false;"
+                       class="btn btn-info btn-block">Create Table Record
+                    </a>
+                {% else %}
+                    <a href="{% url 'sales:ttprodrec' pk %}"
+                       target="_blank"
+                       onClick="window.open('{% url 'sales:ttprodrec' pk %}','pagename',
+                       'resizable,height=900,width=450,left=' + (parseInt(window.innerWidth) * 0.85) + ',top=100');
+                        return false;"
+                       class="btn btn-info btn-block">Create Table Record
+                    </a>
+                {% endif %}
+            {% endif %}
+            <br>
+            {% for rec in prodRec %}
+                <form action="{{ rec.get_update_url }}" method="post">
+                    {% csrf_token %}
+                    <h3 style="text-align:center">Table Record: {{ forloop.counter }}/{{ max_num }}</h3>
+                    <h4 style="text-align:center">Number of Collars: {{ object.number_of_collars|split_by_arg:'$'|get_index:forloop.counter0 }}<br>
+                    </h4>
+                    {% if forloop.counter0 < 1 %}
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <label for="id_co_worker">Co-Worker: </label>
+                            <input name="co_worker" type="text" value="{{ rec.co_worker }}" id="id_co_worker" class="sales-input">
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <label for="id_animal_species">Animalspecies: </label>
+                            <input name="animal_species" type="text" value="{{ rec.animal_species }}" id="id_animal_species" class="sales-input" list="animals">
+                            <datalist id="animals">
+                                {% for animal in animals %}
+                                    <option value="{{ animal.name }}"/>
+                                {% endfor %}
+                            </datalist>
+                        </div>
+                    {% endif %}
+                    {% if forloop.counter <= 1 %}
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <h4>Further instructions:</h4>
+                        <label for="id_further_instructions_programming">Further instructions programming: </label>
+                        <textarea name="further_instructions_programming" cols="40" rows="4" class="sales-instruction"
+                                  maxlength="500" id="id_further_instructions_programming">{{ rec.further_instructions_programming }}</textarea>
+                        <br>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <label for="id_path_customer_folder">Path to customer folder: </label>
+                        {% if rec.path_customer_folder %}
+                            <input type="text" name="path_customer_folder" id="id_path_customer_folder" value="{{ rec.path_customer_folder }}" class="sales-input">
+                        {% else %}
+                            <input type="text" name="path_customer_folder" id="id_path_customer_folder" class="sales-input">
+                        {% endif %}
+                        <br>
+                    </div>
+                    {% endif %}
+                    <br>
+                    <input type="submit" value="Update" class="btn btn-secondary btn-block">
+                </form>
+            <br>
+        {% endfor %}
+    </div>
+{% endblock %}

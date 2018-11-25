@@ -1,0 +1,51 @@
+{% extends 'sales_base.html' %}
+{% block extra_style %}
+    {% include 'surveystyle.html' %}
+<style>
+    .sales-input {
+        float: right;
+    }
+    .sales-instruction {
+        display: -webkit-box;
+    }
+    @media screen and (max-width: 940px) {
+        .inputform {
+            position: inherit;
+        }
+    }
+    @media screen and (min-width: 941px) {
+        .inputform {
+            position: inherit;
+        }
+    }
+    @media screen and (min-width: 1000px) {
+        .inputform {
+            position: inherit;
+            padding-top: 6em;
+        }
+    }
+</style>
+{% endblock %}
+{% block content %}
+    <div class="col-sm-12 col-md-4 col-lg4">
+        <br>
+        <br>
+        <form action="." method="post">
+            {% csrf_token %}
+            {% if write_into_prioListe %}
+                <h3>Are you sure you want to create a record in the Priority-List???</h3>
+            {% else %}
+                {{ form.as_p }}
+            {% endif %}
+            <input type="submit" value="Create" class="btn btn-primary btn-block">
+            <a href="." class="btn btn-secondary btn-block" onclick="window.close(); window.parent.location.href = '/';">Cancel</a>
+        </form>
+    </div>
+{% endblock %}
+{% block script %}
+<script>
+    $(document).ready(function(){
+        $('.hide_me').parents('p').hide();
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,158 @@
+{% extends 'sales_base.html'%}
+{% load extra_tags %}
+{% block content %}
+<div style="margin-left:30%">
+    <h1><b>{{ object.get_model_type }}</b> order information for <b>{{ object.get_operation_number }}</b></h1>
+    {% if not object.check_for_prod_rec %}
+        <h2 style="margin-right:2em; color:chocolate">Please create a Production Record first </h2>
+    {% endif %}
+</div>
+<div class="col-md-12 col-lg-12">
+    <div class="col-md-offset-1 col-md-3 col-lg-offset-1 col-lg-3">
+            <h3>Order Information</h3>
+            <ul>
+                <li><u><b>1. Payment details</b></u></li>
+                <li>Payment option: <b> {{ object.payment_option }} </b></li>
+                {% if object.order_no %}
+                    <li>Order no: <b> {{ object.order_no }} </b></li>
+                {% endif %}
+                <li>Invoice form:
+                    {% if object.as_post %}
+                    <b>via Mail</b>
+                    {% elif object.as_email %}
+                    <b>via e-mail to {{ object.invoice_mail }}</b>
+                    {% endif %}
+                </li>
+                <li>VAT/EIN number: <b>{{ object.vat_ein_number }}</b></li>
+                <li>Delivery time: <b>{{ object.delivery_time }}</b></li>
+                <li></li>
+                <li><u><b>2. Composition of the collar:</b></u></li>
+                <li>Animal species: <b> {{ object.animal_species }} </b></li>
+                {% if object.number_of_collars|split_by_arg:'$'|length > 2 %}
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Num Collars</th>
+                            <th>Battery size</th>
+                            <th>Nom collar circumference</th>
+                        </tr>
+                        {% for i in collar_num_list %}
+                            {% with forloop.counter0 as counter %}
+                                <tr>
+                                    {% for i in collar_num_list %}
+                                        <td>{{ i|get_index:counter }}</td>
+                                    {% endfor %}
+                                </tr>
+                            {% endwith %}
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <table class="table table-bordered">
+                        <tr>
+                            <th>Num Collars</th>
+                            <th>Battery size</th>
+                            <th>Nom collar circumference</th>
+                        </tr>
+                        <tr>
+                            <td>{{ object.number_of_collars}}</td>
+                            <td>{{ object.battery_size}}</td>
+                            <td>{{ object.nom_collar_circumference}}</td>
+                        </tr>
+                    </table>
+                {% endif %}
+            {% if object.belt_shape %}
+                <li>Belt shape: <b> {{ object.belt_shape }} </b></li>
+                <li>Belt width: <b> {{ object.belt_width }} </b></li>
+                <li>Belt thickness: <b> {{ object.belt_thickness }} </b></li>
+                <li>Belt edge: <b> {{ object.belt_edge }} </b></li>
+                <li>Belt color: <b> {{ object.belt_colour }} </b></li>
+                {% if object.other_color %}
+                <li>Other colour: <b> {{ object.other_color }} </b></li>
+                {% endif %}
+                <li>Label plates: <b> {{ object.belt_labeling }} </b></li>
+                <li>Label plates instructions: <b> {{ object.belt_labeling_instructions }} </b></li>
+                <li>Belt marking: <b> {{ object.belt_plates }} </b></li>
+                <li>Marking instructions: <b> {{ object.plates_instructions }} </b></li>
+                <li>Reflective stripes: <b> {{ object.reflective_stripes }} </b></li>
+            {% endif %}
+                <li></li>
+                <li><u><b>3. Programming of the collar</b></u></li>
+            {% if object.get_model_type != 'TT3' %}
+                <li>Mortality sensor delay time: <b> {{ object.mortality_sensor }} </b></li>
+                <li>Notification e-mail: <b> {{ object.notification_mail }} </b></li>
+                <li>Notification SMS: <b> {{ object.notification_sms }} </b></li>
+                <li>Timezone: <b>{{ object.utc_lmt }}</b></li>
+                <li>UTC correction: <b> {{ object.utc_correction }} </b></li>
+                <li>GPS schedule: <b>{{ object.gps_schedule }}</b></li>
+                <li>GPS schedule file: <b><a href="https://order.vectronic-wildlife.com/download_gps_schedule/{{ object.owm_gps_schedule|replace_with_empty:'/gps_schedule' }}">{{ object.owm_gps_schedule }}</a></b></li>
+                <li>VHF beacon schedule: <b>{{ object.vhf_beacon_schedule }}</b></li>
+                <li>VHF beacon schedule file: <b><a href="https://order.vectronic-wildlife.com/download_vhf_schedule/{{ object.own_vhf_schedule|replace_with_empty:'gps_schedule' }}">{{ object.own_vhf_schedule }}</a></b></li>
+                <li>VHF beacon frequencies: <b> {{ object.vhf_beacon_frequency }} </b></li>
+                <li>ID-Tag: {{ object.id_tag }}</li>
+            {% endif %}
+                <li></li>
+                <li><u><b>4. Collar Communication</b></u></li>
+                <li>Store on board: <b>{{ object.store_on_board }}</b></li>
+                <li>GLOBALSTAR: <b>{{ object.globalstar }}</b></li>
+                <li>IRIDIUM: <b>{{ object.iridium }}</b></li>
+                <li>IRIDIUM amount of GPS positions: <b>{{ object.iridium_num_of_fixes_gps }}</b></li>
+                <li>IRIDIUM contract type: <b>{{ object.iridium_contract_type }}</b></li>
+            {% if object.get_model_type == 'Vertex Lite' %}
+                <li>GSM: <b>{{ object.gsm }}</b></li>
+                <li>VECTRONIC SIM: <b>{{ object.gsm_vectronic_sim }}</b></li>
+                <li>Groundstation number: <b>{% if object.groundstation_number %}{{ object.groundstation_number }}{% endif %}</b></li>
+                <li>GSM mode: <b>{{ object.gsm_mode }}</b></li>
+                {% if not object.gsm_vectronic_sim %}
+                    <li>Customer SIM no: <b>{{ object.gsm_customer_sim_telephone_no }}</b></li>
+                    <li>Customer SIM PIN: <b>{{ object.gsm_customer_sim_pin }}</b></li>
+                    <li>Customer SIM PUK: <b>{{ object.gsm_customer_sim_puk }}</b></li>
+                {% endif %}
+            {% endif %}
+                <li>Airtime fee contact name: <b>{{ object.contact_name_airtime_fee }}</b></li>
+                <li>Airtime fee contact e-mail: <b>contact_mail_airtime_fee</b></li>
+                <li>Airtime fee contract: <b><a href="https://order.vectronic-wildlife.com/download{{ object.airtime_contract }}">{{ object.airtime_contract }}</a></b></li>
+            {% if object.get_model_type == 'TT3' %}
+                <li>Interval: <b>{{ object.interval }}</b></li>
+                <li>World location: <b>{{ object.world_location }}</b></li>
+            {% endif %}
+                <li></li>
+                <li><u><b>5. Drop off options</b></u></li>
+                {% if object.external_dropoff %}
+                    <li>External drop off: {{ object.external_dropoff }}</li>
+                    <li>E. drop off RELATIVE mode: <b>{{ object.external_dropoff_real_time }}</b></li>
+                    <li>E. drop off ABSOLUTE mode: <b>{{ object.external_dropoff_abs_time }}</b></li>
+                {% endif %}
+                {% if object.internal_dropoff %}
+                    <li>Internal drop off: {{ object.internal_dropoff }}</li>
+                    <li>I. drop off RELATIVE mode: <b>{{ object.internal_dropoff_real_time }}</b></li>
+                    <li>I. drop off ABSOLUTE mode: <b>{{ object.internal_dropoff_abs_time }}</b></li>
+                {% endif %}
+                    <li></li>
+                    <li><u><b>6. Further Instructions</b></u></li>
+                {% if object.comment %}
+                    <li>Further Instructions: {{ object.comment }}</li>
+                {% endif %}
+                <li></li>
+                <li>Created at: <b> {{ object.created_at }} </b></li>
+                <li>Order acceptet: <b class="order-acceptet"> {{ object.order_acceptet }} </b></li>
+                <br>
+            </ul>
+    </div>
+        {% include 'detail_address.html' %}
+    </div>
+</div>
+    <div style="margin-left:10%; margin-bottom: 3%;">
+       {% include 'action_buton.html' %}
+    </div>
+{% endblock %}
+{% block script %}
+<script>
+    $(document).ready(function(){
+        if($('.order-acceptet').html().trim() == 'True') {
+            $('.edit-btn').css('display', 'none');
+            $('.accept-order-btn').css('display', 'none');
+            $('.open-list-btn').css('display', 'none');
+            $('.done-list-btn').css('display', '-webkit-inline-box');
+        }
+    });
+</script>
+{% endblock %}

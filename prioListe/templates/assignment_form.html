@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container" {%if  hardware_form %}
+     style="margin-top:4%; margin-left:10%"
+     {% else %} style="margin-top:4%"
+     {% endif %}>
+    <row>
+        <form action="." method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table class="table table-bordered">
+                {% for field in form %}
+                    {% if field.name == 'changed_by_ip' %}
+                        <tr class="ip_addr">
+                    {% else %}
+                        <tr>
+                    {% endif %}
+                        {% if field.name == 'hardware' %}
+                        <td><b>{{ field.label }}</b></td>
+                        <td>
+                            {% if hardware_form %}
+                            <table>
+                                <tr>
+                                    {% for hform in hardware_form %}
+                                        <td>{{ hform.as_p }}</td>
+                                    {% endfor %}
+                                </tr>
+                            </table>
+                            {% else %}
+                                {{ field }}
+                                {% if field.help_text %}
+                                    <p class="help">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                        {% else %}
+                            {% if field.errors %}
+                                {% for error in field.errors %}
+                                    <td style="color:chocolate; font-size: 1.2em"><b>{{ error }}</b></td>
+                                {% endfor %}
+                            {% else %}
+                                    <td><b>{{ field.label }}</b></td>
+                            {% endif %}
+                            <td>{{ field }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </table>
+            <div id="dialog" title="Error dialog">
+            <h3 id="dialog-text"></h3>
+        </div>
+            <input class="btn btn-primary btn-lg btn-block submiter" type="submit" value="Bestätigen" onmouseover="checkform()">
+        </form>
+        <br>
+        <a class="btn btn-secondary btn-lg btn-block" href="{% url 'pListe:home' %}">Zurück</a>
+    </row>
+</div>
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(function () {
+            $('.ip_addr').hide();
+            var ip = false;
+            window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection || false;
+
+            if (window.RTCPeerConnection) {
+                ip = Array();
+                var pc = new RTCPeerConnection({iceServers:[]}), noop = function(){};
+                pc.createDataChannel('');
+                pc.createOffer(pc.setLocalDescription.bind(pc), noop);
+
+                pc.onicecandidate = function(event) {
+                    if (event && event.candidate && event.candidate.candidate) {
+                        var s = event.candidate.candidate.split('\n');
+                        var ipString = s[0].split(' ')[4];
+                        $('#id_changed_by_ip').val(ipString);
+                        ip.push(s[0].split(' ')[4]);
+                    }
+                }
+            }
+        });
+
+        function checkform(){
+            if (window.location.href.indexOf('update') <= 0) {
+
+                var regex = new RegExp("[A-Z]");
+
+            $('.submiter').removeAttr('type');
+
+            if ($('#id_form-0-number').val()) {
+                $('#dialog').hide();
+                $('.submiter').attr('type', 'submit');
+            } else {
+                $('#dialog').show();
+                $('#dialog-text').text('Did you forget the Quantity??');
+            }
+
+            }
+        }
+    </script>
+{% endblock %}

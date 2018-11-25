@@ -1,0 +1,77 @@
+{% extends 'statistic_base.html' %}
+{% load extra_tags %}
+{% block content %}
+<div class="col-md-8 col-lg-8">
+    <div class="container">
+        <h1 style="text-align: center">Statistic Shippings</h1>
+        <a href="{% url 'main' %}" class="btn btn-success" style="float: right">Back to overview</a>
+    </div>
+
+    {{ bokeh_div|safe }}
+    {% if months %}
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    {% for m in months %}
+                        <th> {{ m }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tr>
+                {% for v in value %}
+                    <td><span style="color: blue">{{ last_value|get_index:forloop.counter0 }}</span> / <span style="color: #8b000f">{{ v }}</span></td>
+                {% endfor %}
+            </tr>
+        </table>
+    </div>
+    {% endif %}
+</div>
+<div class="col-md-8 col-lg-8">
+    {{ last_div|safe }}
+    {% if last_months %}
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    {% for m in last_months %}
+                        <th> {{ m }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tr>
+                {% for v in last_value %}
+                    <td> {{ v }}</td>
+                {% endfor %}
+            </tr>
+        </table>
+    </div>
+    {% endif %}
+</div>
+<div class="col-md-8 col-lg-8">
+    {{ past_years_div|safe }}
+    {% if past_years %}
+    <div>
+        <table class="table">
+            <thead>
+                <tr>
+                    {% for y in past_years %}
+                        <th> {{ y }}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tr>
+                {% for v in past_value %}
+                    <td> {{ v }}</td>
+                {% endfor %}
+            </tr>
+        </table>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
+{% block script %}
+    {{ bokeh_script|safe }}
+    {{ last_script|safe }}
+    {{ past_years_script|safe }}
+{% endblock %}

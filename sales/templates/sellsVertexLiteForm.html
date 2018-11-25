@@ -1,0 +1,186 @@
+{% extends 'sales_base.html' %}
+{% load extra_tags %}
+{% block extra_style %}
+    {% include 'surveystyle.html' %}
+{% endblock %}
+{% block content %}
+    <div class="col-sm-12 col-md-12 col-lg-12">
+    <div class="col-md-offset-2 col-lg-offset-2 col-md-9 col-lg-9">
+        <h2><b>Edit</b> VertexLite collar order <b>{{ operationNumber }}</b></h2>
+    </div>
+        {% include 'collar_update_form.html' %}
+        <div class="form-group col-xs-12 col-sm-offset-2 col-sm-4 col-lg-offset-1 col-md-offset-1 col-md-3 col-lg-3 inputform">
+            <h2 onmouseover="location.reload();">For Production-Record </h2>
+            {% if count_prod_rec < max_num %}
+                {% if count_prod_rec < 1 %}
+                    <a href="{% url 'sales:vlprodrec' pk %}"
+                       target="_blank"
+                       onClick="window.open('{% url 'sales:vtxlinitialprodrec' pk %}','pagename',
+                       'resizable,height=900,width=450,left=' + (parseInt(window.innerWidth) * 0.85) + ',top=100');
+                        return false;"
+                       class="btn btn-info btn-block">Create Table Record
+                    </a>
+                {% else %}
+                    <a href="{% url 'sales:vlprodrec' pk %}"
+                       target="_blank"
+                       onClick="window.open('{% url 'sales:vlprodrec' pk %}','pagename',
+                       'resizable,height=900,width=450,left=' + (parseInt(window.innerWidth) * 0.85) + ',top=100');
+                        return false;"
+                       class="btn btn-info btn-block">Create Table Record
+                    </a>
+                {% endif %}
+            {% endif %}
+            <br>
+            {% for rec in prodRec %}
+                <form action="{{ rec.get_update_url }}" method="post">
+                    {% csrf_token %}
+                    <h3 style="text-align:center">Table Record: {{ forloop.counter }}/{{ max_num }}</h3>
+                    <h4 style="text-align:center">Number of Collars: {{ object.number_of_collars|split_by_arg:'$'|get_index:forloop.counter0 }}<br>
+                        Battery size: {{ object.battery_size|split_by_arg:'$'|get_index:forloop.counter0 }}<br>
+                        Collar circumference: {{ object.nom_collar_circumference|split_by_arg:'$'|get_index:forloop.counter0 }}
+                    </h4>
+                    {% if forloop.counter0 < 1 %}
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <label for="id_co_worker">Co-Worker: </label>
+                            <input name="co_worker" type="text" value="{{ rec.co_worker }}" id="id_co_worker" class="sales-input">
+                        </div>
+                        <div class="col-sm-12 col-md-12 col-lg-12">
+                            <label for="id_animal_species">Animalspecies: </label>
+                            <input name="animal_species" type="text" value="{{ rec.animal_species }}" id="id_animal_species" class="sales-input" list="animals">
+                            <datalist id="animals">
+                                {% for animal in animals %}
+                                    <option value="{{ animal.name }}"/>
+                                {% endfor %}
+                            </datalist>
+                        </div>
+                    {% endif %}
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <h4>1. Composition of the collar:</h4>
+                        <label for="id_punching1_dist">Punching1 dist: </label>
+                        <select name="punching1_dist" id="id_punching1_dist" class="sales-input">
+                            {% for pos in pos1_dist %}
+                                {% if rec.punching1_dist == pos %}
+                                    <option value="{{ pos }}" selected>{{ pos }}</option>
+                                {% else %}
+                                    <option value="{{ pos }}">{{ pos }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <label for="id_punching1_pos">Punching1 positive: </label>
+                        <select name="punching1_pos" id="id_punching1_pos" class="sales-input">
+                            {% for i in range_twenty %}
+                                {% if rec.punching1_pos == i %}
+                                    <option value="{{ i }}" selected>{{ i }}</option>
+                                {% else %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <label for="id_punching1_neg">Punching1 negative: </label>
+                        <select name="punching1_neg" id="id_punching1_neg" class="sales-input">
+                            {% for i in range_twenty %}
+                                {% if rec.punching1_neg == i %}
+                                    <option value="{{ i }}" selected>{{ i }}</option>
+                                {% else %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <label for="id_punching2">Punching2: </label>
+                        <select name="punching2" id="id_punching2" class="sales-input">
+                            {% for i in punching2 %}
+                                {% if rec.punching2  == i %}
+                                    <option value="{{ i }}" selected>{{ i }}</option>
+                                {% else %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                <div class="col-sm-12 col-md-12 col-lg-12">
+                        <label for="id_protective_belt">Protective belt:</label>
+                        <input type="checkbox" name="protective_belt" class="sales-input"
+                               id="id_protective_belt" {% if rec.protective_belt %} checked {% endif %}>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <label for="id_further_instructions_belt">Further instructions belt: </label>
+                        <textarea name="further_instructions_belt" cols="40" rows="4" class="sales-instruction"
+                                  maxlength="500" id="id_further_instructions_belt">{{ rec.further_instructions_belt }}</textarea>
+                    </div>
+                    {% if forloop.counter <= 1 %}
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <h4>2. Programming of the collar:</h4>
+                        <label for="id_gps_schedule_name">GPS schedule name: </label>
+                        <input name="gps_schedule_name" type="text" value="{{ rec.gps_schedule_name }}" id="id_gps_schedule_name" class="sales-input">
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <label for="id_vhf_schedule_name">VHF schedule name: </label>
+                        <input name="vhf_schedule_name" type="text" value="{{ rec.vhf_schedule_name }}" id="id_vhf_schedule_name" class="sales-input">
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <h4>3. Collar Communication:</h4>
+                        <label for="id_gl_no_of_attempts">GLOBALSTAR no of attempts: </label>
+                        <select name="gl_no_of_attempts" id="id_gl_no_of_attempts" class="sales-input">
+                            {% for i in gl_no %}
+                                {% if rec.gl_no_of_attempts  == i %}
+                                    <option value="{{ i }}" selected>{{ i }}</option>
+                                {% else %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <label for="id_gl_fixes_per_message">GLOBALSTAR fixes per message: </label>
+                        <select name="gl_fixes_per_message" id="id_gl_fixes_per_message" class="sales-input">
+                            {% for i in gl_fixes %}
+                                {% if rec.gl_fixes_per_message  == i %}
+                                    <option value="{{ i }}" selected>{{ i }}</option>
+                                {% else %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <label for="id_ir_fixes_per_message">IRIDIUM fixes per message: </label>
+                        <select name="ir_fixes_per_message" id="id_ir_fixes_per_message" class="sales-input">
+                            {% for i in ir_fixes %}
+                                {% if rec.ir_fixes_per_message  == i %}
+                                    <option value="{{ i }}" selected>{{ i }}</option>
+                                {% else %}
+                                    <option value="{{ i }}">{{ i }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <h4>5. Further instructions:</h4>
+                        <label for="id_further_instructions_programming">Further instructions programming: </label>
+                        <textarea name="further_instructions_programming" cols="40" rows="4" class="sales-instruction"
+                                  maxlength="500" id="id_further_instructions_programming">{{ rec.further_instructions_programming }}</textarea>
+                        <br>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <label for="id_path_customer_folder">Path to customer folder: </label>
+                        {% if rec.path_customer_folder %}
+                            <input type="text" name="path_customer_folder" id="id_path_customer_folder" value="{{ rec.path_customer_folder }}" class="sales-input">
+                        {% else %}
+                            <input type="text" name="path_customer_folder" id="id_path_customer_folder" class="sales-input">
+                        {% endif %}
+                        <br>
+                    </div>
+                    {% endif %}
+                    <br>
+                    <input type="submit" value="Update" class="btn btn-secondary btn-block">
+                </form>
+            <br>
+        {% endfor %}
+    </div>
+{% endblock %}

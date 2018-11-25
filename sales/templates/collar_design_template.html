@@ -1,0 +1,106 @@
+{% load extra_tags %}
+<table class="table" style="border: 1px solid black;">
+    <tr>
+        <td class="main-td" >Animal species: <b> {{ object.animal_species }} </b></td>
+        <td class="main-td">Belt shape: <b>
+            {% if object.belt_shape %}
+                {{ object.belt_shape }}
+            {% else %}
+                not specified
+            {% endif %}
+            </b>
+        </td>
+    </tr>
+</table>
+<table class="table" style="border: 1px solid black;">
+    <tr>
+        <td class="main-td"><b>{{ object.battery_size|find_and_replace:' | ' }}</b> - Battery size</td>
+        <td class="main-td">Belt width: <b>
+            {% if object.belt_width %}
+                {{ object.belt_width }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+    </tr>
+    <tr>
+        <td class="main-td"><b>{{ object.number_of_collars|find_and_replace:' | ' }}</b> - No of collars</td>
+        <td class="main-td">Belt thickness: <b>
+            {% if object.belt_thickness %}
+                {{ object.belt_thickness }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+    </tr>
+    <tr>
+        <td class="main-td"><b>{{ object.nom_collar_circumference|find_and_replace:' | ' }} </b> - Collar circumference</td>
+        <td class="main-td">Belt edge: <b>
+            {% if  object.belt_edge %}
+                {{ object.belt_edge }}
+            {% else %}
+                not specified
+            {% endif %}
+            </b>
+        </td>
+    </tr>
+    <tr>
+        <td class="main-td">Other color: <b>
+            {% if object.other_color %}
+                {{ object.other_color }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b>
+        </td>
+        <td class="main-td">Belt color: <b>
+            {% if object.belt_colour %}
+                {{ object.belt_colour }}
+            {% else %}
+                black - standard
+            {% endif %}
+        </b></td>
+    </tr>
+    <tr>
+        <td class="main-td">Label plates: <b>
+            {% if object.belt_labeling %}
+                Yes
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+        <td class="main-td">Labeling instructions: <b>
+            {% if object.belt_labeling_instructions %}
+                {{ object.belt_labeling_instructions }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b>
+        </td>
+    </tr>
+    <tr>
+        <td class="main-td">Belt marking: <b>
+            {% if object.belt_plates %}
+                Yes
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+        <td class="main-td">Marking instructions: <b>
+            {% if object.belt_plates_instructions %}
+                {{ object.belt_plates_instructions }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+    </tr>
+    <tr>
+        <td class="main-td">Reflective stripes: <b>
+            {% if object.reflective_stripes %}
+                Yes
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+    </tr>
+</table>

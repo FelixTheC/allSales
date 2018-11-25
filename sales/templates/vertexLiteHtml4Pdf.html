@@ -1,0 +1,208 @@
+{% load staticfiles %}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"><!--This file was converted to xhtml by LibreOffice - see http://cgit.freedesktop.org/libreoffice/core/tree/filter/source/xslt for the code.-->
+<head profile="http://dublincore.org/documents/dcmi-terms/">
+    <meta http-equiv="Content-Type" content="application/pdf; charset=utf-8"/>
+    <title xml:lang="de">-Survey Order</title>
+    <meta name="DCTERMS.title" content="" xml:lang="en-US"/>
+    <style type="text/css">
+        td {
+            height: 20;
+        }
+
+        .left-img {
+            display: block;
+            margin: 5 0 0 60;
+        }
+    </style>
+</head>
+<body>
+<div>
+    <p style="color:red; font-size: 30px;"><b>ONLY FOR INTERNAL USAGE</b></p>
+    <p style="color:blue; font-size: 20px;"><b>Order Information Survey Collar {{ object.operation_Number }}</b></p>
+    <table>
+        <tr>
+           <th>Invoice Address</th>
+            <th>Delivery Address</th>
+        </tr>
+        <tr>
+            <td>Organisation Name: <b>{{ object.customer_invoice_address.organisation_name }}</b></td>
+            {% if object.same_addr %}
+                <td>Organisation Name: <b>{{ object.customer_invoice_address.organisation_name }}</b></td>
+            {% else %}
+                <td>Organisation Name: <b>{{ object.delivery_addresse.delivery_organisation_name }}</b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Adress: <b>{{ object.customer_invoice_address.complete_addresse }}</b></td>
+            {% if object.same_addr %}
+                <td>Adress: <b>{{ object.customer_invoice_address.complete_addresse }}</b></td>
+            {% else %}
+                <td>Adress: <b>{{ object.delivery_addresse.delivery_complete_addresse }}</b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Zip: <b>{{ object.customer_invoice_address.zip_code }}</b></td>
+            {% if object.same_addr %}
+                <td>Zip: <b>{{ object.customer_invoice_address.zip_code }}</b></td>
+            {% else %}
+                <td>Zip: <b>{{ object.delivery_addresse.delivery_zip_code }}</b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>City: <b>{{ object.customer_invoice_address.city }}</b></td>
+            {% if object.same_addr %}
+                <td>City: <b>{{ object.customer_invoice_address.city }}</b></td>
+            {% else %}
+                <td>City: <b>{{ object.delivery_addresse.delivery_city }}</b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Country: <b>{{ object.customer_invoice_address.country }}</b></td>
+            {% if object.same_addr %}
+            <td>Country: <b>{{ object.customer_invoice_address.country }}</b></td>
+            {% else %}
+            <td>Country: <b>{{ object.delivery_addresse.delivery_country }}</b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Contact Person: <b>{{ object.customer_invoice_address.contact_person }}</b></td>
+            {% if object.same_addr %}
+                <td>Contact Person: <b>{{ object.customer_invoice_address.contact_person }}</b></td>
+            {% else %}
+                <td>Contact Person: <b>{{ object.delivery_addresse.delivery_contact_person }}</b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>E-mail: <b>{{ object.customer_invoice_address.email_addresse }}</b></td>
+            {% if object.same_addr %}
+                <td>E-mail: <b>{{ object.customer_invoice_address.email_addresse }}</b></td>
+            {% else %}
+                <td>E-Mail: <b>{{ object.delivery_addresse.delivery_email_addresse }}</b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Telephone: <b>{{ object.customer_invoice_address.telephone_nr }}</b></td>
+            {% if object.same_addr %}
+                <td>Telephone: <b>{{ object.customer_invoice_address.telephone_nr }}</b></td>
+            {% else %}
+                <td>Telephone: <b>{{ object.delivery_addresse.delivery_telephone_nr }}</b></td>
+            {% endif %}
+        </tr>
+    </table>
+    <table class="table" style="border: 1px solid black;">
+        <tr>
+            <td>Payment option: <b> {{ object.payment_option }} </b></td>
+            <td>
+                {% if object.order_no %}
+                    Order no: <b> {{ object.order_no }} </b>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Number of collars: <b> {{ object.number_of_collars }} </b></td>
+            <td>Animal species: <b> {{ object.animal_species }} </b></td>
+        </tr>
+        <tr>
+            <td>Battery size: <b> {{ object.battery_size }} </b></td>
+            <td>Belt shape: <b> {{ object.belt_shape }} </b></td>
+        </tr>
+        <tr>
+            <td>Nom. collar circumference: <b> {{ object.nom_collar_circumference }} </b></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>Mortality sensor: <b> {{ object.mortality_sensor }} </b></td>
+            {% if object.external_dropoff == True %}
+            <td></td>
+        </tr>
+        <tr>
+            <td>External drop off: <b> {{ object.external_dropoff }} </b></td>
+            <td>External drop off controll: <b> {{ object.external_dropoff_controll }} </b></td>
+        </tr>
+        <tr>
+            {% if object.external_dropoff_real_time %}
+                <td>External drop off relative time: <b> {{ object.external_dropoff_real_time }} </b></td>
+            {% else %}
+                <td>External drop off absolute time: <b> {{ object.external_dropoff_abs_time }} </b></td>
+            {% endif %}
+            {% endif %}
+            {% if object.utc_lmt == 'lmt' %}
+                <td>UTC/LMT: <b> LMT </b></td>
+            {% else %}
+                <td>UTC/LMT: <b> UTC </b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            {% if object.utc_lmt == 'lmt' %}
+                <td>UTC correction: <b> {{ object.utc_correction }} </b></td>
+            {% endif %}
+            <td>VHF beacon schedule: <b> {{ object.vhf_beacon_schedule }} </b></td>
+        </tr>
+        <tr>
+            <td>Globalstar: <b> {{ object.globalstar }} </b></td>
+            <td>Iridium: <b> {{ object.iridium }} </b></td>
+        </tr>
+        <tr>
+            <td>GSM: <b> {{ object.gsm }} </b></td>
+        </tr>
+        <tr>
+            {% if object.iridium == True %}
+                <td>Iridium num of fixes: <b> {{ object.iridium_num_of_fixes }} </b></td>
+                <td>Iridium mode: <b>{{ object.iridium_mode }}</b></td>
+            {% elif object.gsm == True %}
+                {% if object.gsm_vectronic_sim %}
+                        <td>VECTRONIC sim chips messages: <b>{{ object.iridium_mode }}</b></td>
+                {% else %}
+                        <td>Telephone no: <b>{{ object.gsm_customer_sim_telephone_no }}</b></td>
+                        <td>PIN's: <b>{{ object.gsm_customer_sim_pin }}</b></td>
+        </tr>
+        <tr>
+                        <td>PUK's: <b>{{ object.iridium_num_of_fixes }}</b></td>
+                {% endif %}
+            {% endif %}
+            <td>Contact airtime fee: <b> {{ object.contact_name_airtime_fee }} </b></td>
+        </tr>
+        <tr>
+            <td>Contact e-mail airtime fee: <b> {{ object.contact_mail_airtime_fee }} </b></td>
+            <td>Notification e-mail: <b> {{ object.notification_mail }} </b></td>
+        </tr>
+        <tr>
+            <td>Notification SMS: <b> {{ object.notification_sms }} </b></td>
+        </tr>
+        <tr>
+            <td>Belt width: <b> {{ object.belt_width }} </b></td>
+            <td>Belt thickness: <b> {{ object.belt_thickness }} </b></td>
+        </tr>
+        <tr>
+            <td>Belt edge: <b> {{ object.belt_edge }} </b></td>
+            {% if object.other_color %}
+                <td>Other color: <b>{{ object.other_color }}</b> </td>
+            {% else %}
+                <td>Belt color: <b> {{ object.belt_colour }} </b></td>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Belt labeling: <b> {{ object.belt_labeling }} </b></td>
+            <td>Belting instructions: <b> {{ object.belting_instructions }} </b></td>
+        </tr>
+        <tr>
+            <td>Metal Label plate: <b> {{ object.belt_plates }} </b></td>
+            <td>Metal Label plate text: <b> {{ object.belt_plates_instructions }} </b></td>
+        </tr>
+        <tr>
+            <td>Cotton layers: <b> {{ object.cotton_layers }} </b></td>
+            <td>Comments: <b>{{ object.comment }} </b></td>
+        </tr>
+    </table>
+    <p>VHF beacon frequencies: <b> {{ object.vhf_beacon_frequency }} </b></p>
+</div>
+<div>
+    <br>
+</div>
+<div>
+    <p style="margin: 0 0 0 55;">&copy; 2017 VECTRONIC-Aerospace</p>
+</div>
+</body>
+</html>

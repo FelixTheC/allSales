@@ -1,0 +1,28 @@
+{% extends 'sales_base.html'%}
+{% load extra_tags %}
+{% block extra_style %}
+<style>
+    @media screen and (max-width: 940px) {
+        .diff-shipping {
+            display: none!important;
+        }
+    }
+</style>
+{% endblock %}
+{% block content %}
+<div class="container">
+    <div class="col-sm-12 col-md-9 col-lg-9" style="margin-top: 10em;">
+        <h2>Are you sure you want <b>DELETE</b> <i>{{ obj.operation_Number }}</i></h2>
+        <form action="." method="post" class="form-group">
+            {% csrf_token %}
+            <h3><i>Customer No.:</i> {{ obj.contacts_faktura_id }}</h3>
+            <input type="text" value="{{ object.pk }}" name="delete" id="id_delete"
+                   style="display: none">
+            <input type="submit" value="DELETE" class="btn btn-danger btn-block">
+            <input class="btn btn-info btn-block"
+                       type="button" value="Cancel"
+                       onclick="window.history.go(-1);"/>
+        </form>
+    </div>
+</div>
+{% endblock %}

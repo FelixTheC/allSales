@@ -1,0 +1,45 @@
+<div class="col-sm-12 col-md-offset-1 col-lg-offset-1 col-md-5 col-lg-4 magic">
+    <form action="." method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="col-sm-12 col-md-12 col-lg-12">
+            {% for field in form %}
+                <div class="form-group col-sm-12 col-md-11 col-lg-11 form-container">
+                    {% if field.name == 'number_of_collars' %}
+                        <h3>1. Composition of the collar:</h3>
+                    <br>
+                    {% endif %}
+
+                    {% if field.name == 'vhf_beacon_frequency' %}
+                        <h3>2. Programming of the collar</h3>
+                    {% endif %}
+
+                    {% if field.name == 'globalstar' %}
+                        <h3>3. Collar Communication</h3>
+                    <p><b>Airtime contract:</b>
+                        <a href="https://order.vectronic-wildlife.com/download{{ airtime_contract }}">{{ airtime_contract }}</a>
+                    </p>
+                    <br>
+                    {% endif %}
+
+                    {% if field.name == 'external_dropoff' %}
+                        <h3>4. Drop Off options</h3>
+                    {% endif %}
+
+                    {% if field.name == 'comment' %}
+                        <h3>5. Further instructions</h3>
+                    {% endif %}
+
+                    <label class="col-form-label">{{ field.label_tag }}</label>
+                    {% for error in field.errors %}
+                    <p style="color:brown">{{ error }}</p>
+                    {% endfor %}
+                    {{ field }}
+                    <p> {{ field.help_text|safe }} </p>
+                </div>
+            {% endfor %}
+            <div class="form-group col-md-12 col-lg-12">
+                <input type="submit" value="Change/Back" class="btn btn-primary btn-block"/>
+            </div>
+        </div>
+    </form>
+</div>

@@ -1,0 +1,54 @@
+.sales-input {
+    float: right;
+}
+.sales-instruction {
+    display: -webkit-box;
+}
+@media screen and (max-width: 940px) {
+    .inputform {
+        position: inherit;
+    }
+    .form-container {
+        display: grid;
+    }
+}
+@media screen and (min-width: 941px) {
+    .inputform {
+        position: inherit;
+    }
+    .form-container {
+        display: grid;
+    }
+}
+@media screen and (min-width: 1000px) {
+    .inputform {
+        position: inherit;
+        padding-top: 6em;
+    }
+    .form-container {
+        display: grid;
+    }
+}
+@media screen and (min-width: 1300px) {
+    .form-container {
+        display: block;
+    }
+}
+.form-container input[type="text"] {
+    float: right;
+}
+.form-container input[type="checkbox"] {
+    float: right;
+}
+.form-container input[type="number"] {
+    float: right;
+}
+.form-container input[type="email"] {
+    float: right;
+}
+.form-container textarea {
+    float: right;
+}
+.form-container select {
+    float: right;
+}

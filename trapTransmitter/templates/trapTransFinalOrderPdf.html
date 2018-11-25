@@ -1,0 +1,64 @@
+{% extends 'collar_order_pdf_template.html' %}
+{% load extra_tags %}
+
+{% block title %}
+    <b>Vertex Lite Collar original order</b>
+{% endblock %}
+
+{% block collar_composition %}
+    <table class="table" style="border: 1px solid black;">
+        <tr>
+            <td class="main-td"><b>{{ object.number_of_collars|find_and_replace:' | ' }}</b> - No of trap transmitter</td>
+            <td class="main-td">World location: <b>{{ object.world_location }}</b></td>
+        </tr>
+        <tr>
+            <td class="main-td">Message interval: <b>{{ object.interval }}</b></td>
+            <td class="main-td"></td>
+        </tr>
+    </table>
+{% endblock %}
+
+{% block comunication %}
+    <tr>
+        <td class="main-td">GLOBALSTAR: <b>{{ object.globalstar }}</b></td>
+        <td class="main-td">IRIDIUM: <b>{{ object.iridium }}</b></td>
+    </tr>
+    <tr>
+        {% if object.iridium_num_of_fixes_gps %}
+            <td class="main-td">IRIDIUM amount of GPS positions: <b>
+                {% if object.iridium_num_of_fixes_gps %}
+                    {{ object.iridium_num_of_fixes_gps }}
+                {% else %}
+                    not specified
+                {% endif %}
+            </b></td>
+            <td class="main-td">IRIDIUM Contract type: <b>{{ object.iridium_contract_type }}</b></td>
+        {% else %}
+            <td class="main-td">---</td>
+            <td class="main-td">---</td>
+        {% endif %}
+    </tr>
+    <tr>
+        <td class="main-td">Airtime fee contact name: <b>
+            {% if object.contact_name_airtime_fee %}
+                {{ object.contact_name_airtime_fee }}</b></td>
+            {% else %}
+                not specified
+            {% endif %}
+        <td class="main-td">Airtime fee contact e-mail: <b>
+            {% if object.contact_mail_airtime_fee %}
+                {{ object.contact_mail_airtime_fee }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+    </tr>
+    <tr>
+        {% if object.airtime_contract %}
+            <td class="main-td">Uploaded an airtime fee contract: <b>True</b></td>
+        {% else %}
+            <td class="main-td">Uploaded an airtime fee contract: <b>False</b></td>
+        {% endif %}
+        <td class="main-td"></td>
+    </tr>
+{% endblock %}

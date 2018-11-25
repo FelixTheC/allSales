@@ -1,0 +1,86 @@
+<table class="table" style="border: 1px solid black;">
+    <tr>
+        <td class="main-td">Mortality sensor delay time: <b>
+            {% if object.mortality_sensor %}
+                {{ object.mortality_sensor }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+        <td class="main-td"></td>
+    </tr>
+    <tr>
+        <td class="main-td">Notification e-mail: <b>
+            {% if object.notification_mail %}
+                {{ object.notification_mail }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+        <td class="main-td">Notification SMS: <b>
+            {% if object.notification_sms %}
+                {{ object.notification_sms }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+    </tr>
+    <tr>
+        <td class="main-td">Timezone: <b>
+            {% if object.utc_lmt %}
+                {{ object.utc_lmt|upper }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+        <td class="main-td">UTC correction: <b>
+            {% if object.utc_correction %}
+                {{ object.utc_correction }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+    </tr>
+    <tr>
+        <td class="main-td">GPS schedule: <b>
+            {% if object.gps_schedule %}
+                {{ object.gps_schedule|upper }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+        <td class="main-td">VHF beacon schedule: <b>
+            {% if object.vhf_beacon_schedule %}
+                {{ object.vhf_beacon_schedule }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+    </tr>
+    <tr>
+        <td class="main-td">Uploaded an GPS schedule: <b>
+            {% if object.owm_gps_schedule %}
+                true
+            {% else %}
+                false
+            {% endif %}
+        </b></td>
+        <td class="main-td">Uploaded an VHF beacon schedule: <b>
+            {% if object.own_vhf_schedule %}
+                true
+            {% else %}
+                false
+            {% endif %}
+        </b></td>
+    </tr>
+    <tr>
+        <td class="main-td">ID-Tag: <b>
+            {% if object.id_tag %}
+                {{ object.id_tag }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+        <td class="main-td"></td>
+    </tr>
+</table>

@@ -1,0 +1,137 @@
+{% extends 'surveyHtml4Pdf.html' %}
+
+{% block title %}
+    <b>Final Collar Specification for a Vertex Lite collar order</b>
+{% endblock %}
+
+{% block comunication %}
+     <tr>
+        <td class="main-td">GSM: <b>{{ object.gsm }}</b></td>
+        <td class="main-td">Store on board: <b>{{ object.store_on_board }}</b></td>
+    </tr>
+    <tr>
+        <td class="main-td">GLOBALSTAR: <b>{{ object.globalstar }}</b></td>
+        <td class="main-td">IRIDIUM: <b>{{ object.iridium }}</b></td>
+    </tr>
+    <tr>
+        {% if object.iridium_num_of_fixes_gps %}
+            <td class="main-td">IRIDIUM amount of GPS positions: <b>
+                {% if object.iridium_num_of_fixes_gps %}
+                    {{ object.iridium_num_of_fixes_gps }}
+                {% else %}
+                    not specified
+                {% endif %}
+            </b></td>
+            <td class="main-td">IRIDIUM Contract type: <b>{{ object.iridium_contract_type }}</b></td>
+        {% else %}
+            <td class="main-td">---</td>
+            <td class="main-td">---</td>
+        {% endif %}
+    </tr>
+    <tr>
+        <td class="main-td">Airtime fee contact name: <b>
+            {% if object.contact_name_airtime_fee %}
+                {{ object.contact_name_airtime_fee }}</b></td>
+            {% else %}
+                not specified
+            {% endif %}
+        <td class="main-td">Airtime fee contact e-mail: <b>
+            {% if object.contact_mail_airtime_fee %}
+                {{ object.contact_mail_airtime_fee }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+    </tr>
+    <tr>
+        {% if object.airtime_contract %}
+            <td class="main-td">Uploaded an airtime fee contract: <b>True</b></td>
+        {% else %}
+            <td class="main-td">Uploaded an airtime fee contract: <b>False</b></td>
+        {% endif %}
+        <td class="main-td">Groundstation No.:
+            {% if object.groundstation_number %}
+                <b>{{ object.groundstation_number }}</b>
+            {% else %}
+                not specified
+            {% endif %}
+        </td>
+    </tr>
+{% endblock %}
+
+{% block dropoff %}
+    <tr>
+        <td class="main-td">Internal Drop Off: <b>{% if object.internal_dropoff %}
+                {{ object.internal_dropoff_controll }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+        <td class="main-td">External Drop Off: <b>{% if object.external_dropoff %}
+                {{ object.external_dropoff_controll }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b>
+    </tr>
+    <tr></td>
+        {% if object.cotton_layers %}
+            <td class="main-td">Cotton spacer: <b>{{ object.cotton_layers }}</b></td>
+        {% else %}
+            <td class="main-td">Cotton spacer: <b>not specified</b></td>
+        {% endif %}</tr>
+    <tr>
+        <td class="main-td">I. Drop Off RELATIVE mode: <b>
+            {% if object.internal_dropoff_real_time %}
+                {{ object.internal_dropoff_real_time }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+        <td class="main-td">E. Drop Off ABSOLUTE mode: <b>
+            {% if object.external_dropoff_abs_time %}
+                {{ object.external_dropoff_abs_time }}</b></td>
+            {% else %}
+                not specified
+            {% endif %}
+    </tr>
+    <tr>
+        <td class="main-td">E. Drop Off RELATIVE mode: <b>
+            {% if object.external_dropoff_real_time %}
+                {{ object.external_dropoff_real_time }}
+            {% else %}
+                not specified
+            {% endif %}
+        </b></td>
+        <td class="main-td">E. Drop Off ABSOLUTE mode: <b>
+            {% if object.external_dropoff_abs_time %}
+                {{ object.external_dropoff_abs_time }}</b></td>
+            {% else %}
+                not specified
+            {% endif %}
+    </tr>
+{% endblock %}
+
+{% block extras %}
+    <p style="font-size: 12px;">Telephone no:: <b>
+            {% if object.gsm_customer_sim_telephone_no %}
+                {{ object.gsm_customer_sim_telephone_no }}
+            {% else %}
+                not specified cause you are using a VECTRONIC SIM
+            {% endif %}
+        </b></p>
+    <p style="font-size: 12px;">Sim pins: <b>
+            {% if object.gsm_customer_sim_pin %}
+                {{ object.gsm_customer_sim_pin }}
+            {% else %}
+                not specified cause you are using a VECTRONIC SIM
+            {% endif %}
+        </b></p>
+    <p style="font-size: 12px;">Sim puks: <b>
+            {% if object.gsm_customer_sim_puk %}
+                {{ object.gsm_customer_sim_puk }}
+            {% else %}
+                not specified cause you are using a VECTRONIC SIM
+            {% endif %}
+        </b></p>
+{% endblock %}
